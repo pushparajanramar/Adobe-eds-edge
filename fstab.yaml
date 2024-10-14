@@ -1,5 +1,5 @@
 mountpoints:
   /:
-    url: https://jnj.sharepoint.com/teams/iMKIT-External-AdobeEdgePOC/Shared%20Documents/eds
+    url: https://sharepoint.capgemini.com/Sites/helix/SitePages/Home.aspx
     type: markup
 
