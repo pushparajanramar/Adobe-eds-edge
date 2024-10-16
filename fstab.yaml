@@ -1,5 +1,2 @@
 mountpoints:
-  /:
-    url: https://capgemininar.sharepoint.com/:w:/r/sites/JnJEdgeDeliveryServicesPoC/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7B33e74e76-8a87-4cf7-89da-8ab0117436e4%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=1728912465904&web=1
-    type: markup
-
+  /:https://drive.google.com/drive/u/0/folders/1ceag_bsoD9vzPe_1hpAyB1YfHSm64PyF
