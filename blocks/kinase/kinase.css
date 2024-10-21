@@ -1,15 +1,22 @@
 .kinase table {
   width: 100%;
   overflow-x: auto;
-  border:1px solid #ccc;
+  border:1px solid #ccc
 }
+
+
+.kinase table tr th {
+  background-color: #035fe6
+}
+
+
 
 table {
   width: 100%;
   overflow-x: auto;
 }
 
-.table table {
+ table {
   width: 100%;
   max-width: 100%;
   border-collapse: collapse;
@@ -17,13 +24,13 @@ table {
 }
 
 @media (width >= 600px) {
-  .table table {
+table {
     font-size: var(--body-font-size-s);
   }
 }
 
 @media (width >= 900px) {
-  .table table {
+ table {
     font-size: var(--body-font-size-m);
   }
 }
@@ -33,41 +40,45 @@ table {
   border-bottom: 2px solid #dadada;
 }
 
-.table table tbody tr {
+ table tbody tr {
   border-bottom: 1px solid #dadada;
 }
 
-.table table th {
+ table th {
   font-weight: 700;
 }
 
-.table table th,
-.table table td {
+table th,
+ table td {
   padding: 0.5em;
   text-align: left;
 }
 
-.table table th p,
-.table table td p {
+ table th p,
+ table td p {
   margin: 0;
 }
 
-.table table td p + p {
+ table td p + p {
   margin-top: 0.25em;
 }
 
 /* no header variant */
-.table.no-header table tbody tr {
+table.no-header table tbody tr {
   border-top: 1px solid #dadada;
 }
 
 /* striped variant */
-.table.striped tbody tr:nth-child(odd) {
+table.striped tbody tr:nth-child(odd) {
   background-color: var(--light-color);
 }
 
 /* bordered variant */
-.table.bordered table th,
-.table.bordered table td {
+table.bordered table th,
+table.bordered table td {
   border: 1px solid #dadada;
+}
+
+.kinase table tr th {
+  background-color: #035fe6
 }
