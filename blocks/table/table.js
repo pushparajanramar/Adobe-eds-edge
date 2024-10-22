@@ -53,7 +53,7 @@ cTable.forEach(table => {
             cells[0].style.backgroundColor = 'yellow'; // Change background color
  
             // Optionally, clear the content of the second cell
-            cells[1].style.display = 'none'; // Hide the second cell if desired
+           cells[1].remove(); // Hide the second cell if desired
         }
     }
 });
