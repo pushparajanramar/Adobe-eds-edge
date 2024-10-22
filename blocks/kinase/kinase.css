@@ -1,17 +1,83 @@
-.kinase table {
-  width: 100%;
- 
-  border:1px solid #ccc
+.papillon table {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #dadada;
 }
 
-
-.kinase table tr th {
-  background-color: #035fe6
+.papillon table {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    font-size: var(--body-font-size-xs);
+    border: 1px solid #dadada;
 }
 
+table th {
+    background-color: blue;
+    color: #fff;
+    font-weight: 900;
+}
 
+table th,
+ table td {
+    padding: 0.5em;
+    text-align: left;
+    border: 1px solid #dadada;
+}
 
+@media (width >= 600px) {
+    table {
+        font-size: var(--body-font-size-s);
+    }
+}
 
-.kinase table tr th {
-  background-color: #035fe6
+@media (width >= 900px) {
+    table {
+        font-size: var(--body-font-size-m);
+    }
+}
+
+table thead tr {
+    border-top: 1px solid #dadada;
+    border-bottom: 1px solid #dadada;
+}
+
+table tbody tr {
+    border-bottom: 1px solid #dadada;
+}
+
+table th {
+    font-weight: 700;
+}
+
+table th,
+ table td {
+    padding: 0.5em;
+    text-align: left;
+    border: 1px solid #dadada;
+}
+
+table th p,
+ table td p {
+    margin: 0;
+}
+
+table td p + p {
+    margin-top: 0.25em;
+}
+
+/* no header variant */
+.table.no-header table tbody tr {
+    border-top: 1px solid #dadada;
+}
+
+/* striped variant */
+.table.striped tbody tr:nth-child(odd) {
+    background-color: var(--light-color);
+}
+
+/* bordered variant */
+.table.bordered table th,
+.table.bordered table td {
+    border: 1px solid #dadada;
 }
