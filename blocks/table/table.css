@@ -6,8 +6,13 @@
 .table table {
   width: 100%;
   max-width: 100%;
+  border:1px solid #ccc;
   border-collapse: collapse;
   font-size: var(--body-font-size-xs);
+}
+
+.table table tr th{
+  background-color:#C6D9F1;
 }
 
 @media (width >= 600px) {
