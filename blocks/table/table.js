@@ -35,16 +35,17 @@ export default async function decorate(block) {
   // Select the table
 const cTable = document.querySelectorAll('.table')
 
-// Get all rows in the table
-const rows = cTable.getElementsByTagName('tr');
+cTable.forEach(table => {
+    // Get all rows in the current table
+    const rows = table.getElementsByTagName('tr');
 
-// Check if there are rows
-if (rows.length > 0) {
-    // Get the last row
-    const lastRow = rows[rows.length - 1];
+    // Check if there are rows
+    if (rows.length > 0) {
+        // Get the last row
+        const lastRow = rows[rows.length - 1];
 
-    // Do something with the last row, e.g., change its background color
-    lastRow.style.backgroundColor = 'yellow';
-}
-
+        // Do something with the last row, e.g., change its background color
+        lastRow.style.backgroundColor = 'yellow';
+    }
+});
 }
