@@ -31,4 +31,20 @@ export default async function decorate(block) {
   });
   block.innerHTML = '';
   block.append(table);
+
+  // Select the table
+const cTable = document.getElementByClassName('table');
+
+// Get all rows in the table
+const rows = cTable.getElementsByTagName('tr');
+
+// Check if there are rows
+if (rows.length > 0) {
+    // Get the last row
+    const lastRow = rows[rows.length - 1];
+
+    // Do something with the last row, e.g., change its background color
+    lastRow.style.backgroundColor = 'yellow';
+}
+
 }
