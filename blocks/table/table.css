@@ -14,7 +14,7 @@
 
 .table table tr th {
 /*   background-color:#C6D9F1; */
-  background-color: coral;
+  background-color: #C6D9F1;
 }
 
 @media (width >= 600px) {
