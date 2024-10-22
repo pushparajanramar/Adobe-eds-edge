@@ -34,7 +34,7 @@ export default async function decorate(block) {
 
   // Select the table
 const cTable = document.querySelectorAll('.table')
-
+console.log('cTable',cTable)
 cTable.forEach(table => {
     // Get all rows in the current table
     const rows = table.getElementsByTagName('tr');
