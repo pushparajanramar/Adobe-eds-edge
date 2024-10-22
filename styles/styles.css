@@ -378,14 +378,3 @@ ol ol ol {
 }
 
 
-body {
-  overflow: hidden;
-}
-
-body.hide-content-scroll {
-  overflow: auto;
-}
-
-.hide-content-scroll main .breadcrumbs-container{
-  overflow: hidden;
-}
