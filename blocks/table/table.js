@@ -33,8 +33,8 @@ export default async function decorate(block) {
   block.append(table);
 
   // Select the table
-const cTable = document.querySelector(".table table");;
-alert(cTable)
+const cTable = document.querySelectorAll(".table table");;
+
 // Get all rows in the table
 const rows = cTable.getElementsByTagName('tr');
 
