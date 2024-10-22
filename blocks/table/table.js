@@ -31,7 +31,15 @@ export default async function decorate(block) {
   });
   block.innerHTML = '';
   block.append(table);
-
+  
+function setColSpan() {
+    var customtable = document.querySelectorAll('.table');
+    customtable.deleteRow(0);
+    var row = table.insertRow(0);
+    var cell = row.insertCell(0);
+    cell.innerHTML= "cell 1"
+    cell.colSpan = 2
+}
   // Select the table
 const cTable = document.querySelectorAll('.table')
 console.log('cTable',cTable)
@@ -46,6 +54,7 @@ cTable.forEach(table => {
 
         // Do something with the last row, e.g., change its background color
         lastRow.style.backgroundColor = 'yellow';
+        lastRow.setAttribute("colspan", "2");
     }
 });
 }
