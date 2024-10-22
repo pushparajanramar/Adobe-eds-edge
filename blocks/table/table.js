@@ -32,29 +32,29 @@ export default async function decorate(block) {
   block.innerHTML = '';
   block.append(table);
   
-function setColSpan() {
-    var customtable = document.querySelectorAll('.table');
-    customtable.deleteRow(0);
-    var row = table.insertRow(0);
-    var cell = row.insertCell(0);
-    cell.innerHTML= "cell 1"
-    cell.colSpan = 2
-}
-  // Select the table
-const cTable = document.querySelectorAll('.table')
-console.log('cTable',cTable)
+const cTable = document.querySelectorAll('.table');
+console.log('cTable', cTable);
 cTable.forEach(table => {
     // Get all rows in the current table
     const rows = table.getElementsByTagName('tr');
-
+ 
     // Check if there are rows
     if (rows.length > 0) {
         // Get the last row
         const lastRow = rows[rows.length - 1];
-
-        // Do something with the last row, e.g., change its background color
-        lastRow.style.backgroundColor = 'yellow';
-        lastRow.setAttribute("colspan", "2");
+ 
+        // Get all cells in the last row
+        const cells = lastRow.getElementsByTagName('td');
+ 
+        // Check if there are at least two cells
+        if (cells.length >= 2) {
+            // Merge the first cell with the second cell
+            cells[0].setAttribute("colspan", "2"); // Set colspan to 2 on the first cell
+            cells[0].style.backgroundColor = 'yellow'; // Change background color
+ 
+            // Optionally, clear the content of the second cell
+            cells[1].style.display = 'none'; // Hide the second cell if desired
+        }
     }
 });
 }
