@@ -1,6 +1,7 @@
 .table {
   width: 100%;
   overflow-x: auto;
+  margin:10px 0;
 }
 
 .table table {
@@ -11,8 +12,9 @@
   font-size: var(--body-font-size-xs);
 }
 
-.table table tr th{
-  background-color:#C6D9F1;
+.table table tr th {
+/*   background-color:#C6D9F1; */
+  background-color: coral;
 }
 
 @media (width >= 600px) {
