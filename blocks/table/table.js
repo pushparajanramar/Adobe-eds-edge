@@ -51,7 +51,7 @@ export default async function decorate(block) {
           lastRow.removeChild(cells[i]);
         }
       }
-    });
+   
 
  
 }
