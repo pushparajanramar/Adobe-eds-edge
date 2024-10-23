@@ -25,39 +25,35 @@ export default async function decorate(block) {
   });
   block.innerHTML = '';
   block.append(table);
-  
-     
-      const rows = tbody.getElementsByTagName('tr');
+    const tables = document.querySelectorAll("table"); // Select all tables
 
-      const ctable = document.querySelectorAll(".table table");
+      tables.forEach(table => {
+        const tbody = table.querySelector('tbody');
+        if (tbody) {
+          const rows = tbody.getElementsByTagName('tr');
 
-    // Ensure at least one table exists
-    if (ctable.length > 0) {
-        const ctbody = ctable[0].querySelector('tbody'); // Access the first table's tbody
-        const rows = ctbody.getElementsByTagName('tr');
+          // Proceed only if there are rows
+          if (rows.length > 0) {
+            const lastRow = rows[rows.length - 1];
+            const cells = lastRow.getElementsByTagName('td');
 
-        // Get the last row
-        const lastRow = rows[rows.length - 1];
+            if (cells.length > 0) {
+              const lastCell = cells[cells.length - 1];
 
-        // Get all cells in the last row
-        const cells = lastRow.getElementsByTagName('td');
+              // Set colspan to the number of columns (use cells.length to generalize)
+              lastCell.setAttribute('colspan', cells.length);
 
-        if (cells.length > 0) {
-            // Get the last cell
-            const lastCell = cells[cells.length - 1];
+              // Optional: Set the content of the last cell
+              lastCell.textContent = lastRow.textContent;
 
-            // Set colspan to the number of columns (2 in this case)
-            lastCell.setAttribute('colspan', 2);
-
-            // Optionally, you can set the content of the last cell
-            lastCell.textContent = `${lastRow.textContent}`;
-
-            // Remove other cells in the last row
-            for (let i = 0; i < cells.length - 1; i++) {
+              // Remove other cells in the last row
+              for (let i = 0; i < cells.length - 1; i++) {
                 lastRow.removeChild(cells[i]);
+              }
             }
+          }
         }
-    }
+      });
 
  
 }
