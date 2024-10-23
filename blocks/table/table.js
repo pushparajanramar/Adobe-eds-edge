@@ -32,7 +32,32 @@ export default async function decorate(block) {
   block.innerHTML = '';
   block.append(table);
   
+      const table = document.querySelectorAll(".table table");
+      const tbody = table.querySelector('tbody');
+      const rows = tbody.getElementsByTagName('tr');
 
+      // Get the last row
+      const lastRow = rows[rows.length - 1];
+
+      // Get all cells in the last row
+      const cells = lastRow.getElementsByTagName('td');
+
+      if (cells.length > 0) {
+        // Get the last cell
+        const lastCell = cells[cells.length - 1];
+
+        // Set colspan to the number of columns (2 in this case)
+        lastCell.setAttribute('colspan', 2);
+
+        // Optionally, you can set the content of the last cell
+        lastCell.textContent = `${lastRow.textContent}`
+
+        // Remove other cells in the last row
+        for (let i = 0; i < cells.length - 1; i++) {
+          lastRow.removeChild(cells[i]);
+        }
+      }
+    });
 
  
 }
