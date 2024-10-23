@@ -25,35 +25,32 @@ export default async function decorate(block) {
   });
   block.innerHTML = '';
   block.append(table);
-    const tables = document.querySelectorAll("table"); // Select all tables
+   const ctable = document.querySelectorAll("table");
+    const ctbody = ctable.querySelector('tbody');
+    const rows = ctbody.getElementsByTagName('tr');
 
-      tables.forEach(table => {
-        const tbody = table.querySelector('tbody');
-        if (tbody) {
-          const rows = tbody.getElementsByTagName('tr');
+    // Get the last row
+    const lastRow = rows[rows.length - 1];
 
-          // Proceed only if there are rows
-          if (rows.length > 0) {
-            const lastRow = rows[rows.length - 1];
-            const cells = lastRow.getElementsByTagName('td');
+    // Get all cells in the last row
+    const cells = lastRow.getElementsByTagName('td');
 
-            if (cells.length > 0) {
-              const lastCell = cells[cells.length - 1];
+    if (cells.length > 0) {
+      // Get the last cell
+      const lastCell = cells[cells.length - 1];
 
-              // Set colspan to the number of columns (use cells.length to generalize)
-              lastCell.setAttribute('colspan', cells.length);
+      // Set colspan to the number of columns (2 in this case)
+      lastCell.setAttribute('colspan', 2);
 
-              // Optional: Set the content of the last cell
-              lastCell.textContent = lastRow.textContent;
+      // Optionally, you can set the content of the last cell
+      lastCell.textContent = `${lastRow.textContent}`
 
-              // Remove other cells in the last row
-              for (let i = 0; i < cells.length - 1; i++) {
-                lastRow.removeChild(cells[i]);
-              }
-            }
-          }
-        }
-      });
+      // Remove other cells in the last row
+      for (let i = 0; i < cells.length - 1; i++) {
+        lastRow.removeChild(cells[i]);
+      }
+    }
+
 
  
 }
