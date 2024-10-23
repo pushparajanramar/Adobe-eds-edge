@@ -32,9 +32,9 @@ export default async function decorate(block) {
   block.innerHTML = '';
   block.append(table);
   
-      const table = document.querySelectorAll(".table table");
-      const tbody = table.querySelector('tbody');
-      const rows = tbody.getElementsByTagName('tr');
+      const ctable = document.querySelectorAll(".table table");
+      const ctbody = ctable.querySelector('tbody');
+      const rows = ctbody.getElementsByTagName('tr');
 
       // Get the last row
       const lastRow = rows[rows.length - 1];
