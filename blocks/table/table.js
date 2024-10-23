@@ -25,7 +25,7 @@ export default async function decorate(block) {
   });
   block.innerHTML = '';
   block.append(table);
-   const ctable = document.querySelectorAll("table");
+   const ctable = document.querySelector("table");
     const ctbody = ctable.querySelector('tbody');
     const rows = ctbody.getElementsByTagName('tr');
 
