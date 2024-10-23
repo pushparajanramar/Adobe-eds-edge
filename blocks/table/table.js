@@ -27,7 +27,7 @@ export default async function decorate(block) {
   block.append(table);
   
      
-      const rows = ctbody.getElementsByTagName('tr');
+      const rows = tbody.getElementsByTagName('tr');
 
       const ctable = document.querySelectorAll(".table table");
 
