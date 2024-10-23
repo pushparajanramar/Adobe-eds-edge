@@ -255,3 +255,10 @@ main .section.highlight {
   margin: 0;
   padding: 40px 0;
 }
+
+.table-container p {
+ font-family: var(--body-font-family);
+  font-style: normal;
+  font-weight: 500;
+ font-size:80px
+}
