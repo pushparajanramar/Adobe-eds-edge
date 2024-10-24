@@ -694,6 +694,18 @@ async function waitForLCP(lcpBlocks) {
   });
 }
 
+export function decorateBookmarkLinks(main) {
+  main.querySelectorAll('a').forEach((a) => {
+    const href = a.getAttribute('href');
+    if (href) {
+      if (href.includes('bookmark')) {
+        const relativeUrl = href.replace(/^.*\/\/[^\/]+/, ''); a.setAttribute('href', relativeUrl);
+        console.log(`Converted to relative URL: ${relativeUrl}`);
+      }
+    }
+  });
+}
+
 init();
 
 export {
@@ -721,4 +733,5 @@ export {
   toClassName,
   updateSectionsStatus,
   waitForLCP,
+  decorateBookmarkLinks,
 };
