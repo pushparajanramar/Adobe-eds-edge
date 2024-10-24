@@ -644,6 +644,7 @@ function decorateBlock(block) {
  * @param {Element} main The container element
  */
 function decorateBlocks(main) {
+  console.log("href", );
   main.querySelectorAll('div.section > div > div').forEach(decorateBlock);
 }
 
