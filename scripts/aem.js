@@ -697,6 +697,7 @@ async function waitForLCP(lcpBlocks) {
 function decorateBookmarkLinks(main) {
   main.querySelectorAll('a').forEach((a) => {
     const href = a.getAttribute('href');
+    console.log(`href`, href);
     if (href) {
       if (href.includes('bookmark')) {
         const relativeUrl = href.replace(/^.*\/\/[^\/]+/, ''); a.setAttribute('href', relativeUrl);
