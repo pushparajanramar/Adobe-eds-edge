@@ -146,13 +146,3 @@ loadPage();
 */
 
 
-  main.querySelectorAll('a').forEach((a) => {
-    const href = a.getAttribute('href');
-    if (href) {
-      if (href.includes('bookmark')) {
-        const relativeUrl = href.replace(/^.*\/\/[^\/]+/, ''); a.setAttribute('href', relativeUrl);
-        console.log(`Converted to relative URL: ${relativeUrl}`);
-      }
-    }
-  });
-
