@@ -576,8 +576,7 @@ function buildBlock(blockName, content) {
  * @param {Element} block The block element
  */
 async function loadBlock(block) {
-  console.log('loadBlock')
-  const status = block.dataset.blockStatus;
+   const status = block.dataset.blockStatus;
   if (status !== 'loading' && status !== 'loaded') {
     block.dataset.blockStatus = 'loading';
     const { blockName } = block.dataset;
@@ -645,8 +644,7 @@ function decorateBlock(block) {
  * @param {Element} main The container element
  */
 function decorateBlocks(main) {
-  console.log("decorateBlocks code is called here ", );
-  main.querySelectorAll('div.section > div > div').forEach(decorateBlock);
+   main.querySelectorAll('div.section > div > div').forEach(decorateBlock);
 }
 
 /**
