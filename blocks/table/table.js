@@ -73,19 +73,5 @@ export default async function decorate(block) {
  })
 
 
-  for (let i = 0; i < rows.length - 1; i++) {
-      const currentRow = rows[i];
-      const nextRow = rows[i + 1];
-
-      // Check if current row has more than 1 <th> or <td>
-      const currentCells = currentRow.querySelectorAll('th, td');
-      const nextCells = nextRow.querySelectorAll('td');
-
-      if (currentCells.length > 1 && nextCells.length === 1) {
-        const colspanValue = currentCells.length;
-        nextCells[0].setAttribute('colspan', colspanValue);
-      }
-    }
-
 
 }
