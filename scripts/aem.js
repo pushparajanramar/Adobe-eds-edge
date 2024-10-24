@@ -694,7 +694,7 @@ async function waitForLCP(lcpBlocks) {
   });
 }
 
-export function decorateBookmarkLinks(main) {
+function decorateBookmarkLinks(main) {
   main.querySelectorAll('a').forEach((a) => {
     const href = a.getAttribute('href');
     if (href) {
