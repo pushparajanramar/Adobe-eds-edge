@@ -256,9 +256,4 @@ main .section.highlight {
   padding: 40px 0;
 }
 
-.table-container p {
- font-family: var(--body-font-family);
-  font-style: normal;
-  font-weight: 500;
- font-size:12px
-}
+
