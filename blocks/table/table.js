@@ -72,7 +72,7 @@ export default async function decorate(block) {
    
  })
 
-=====
+
   for (let i = 0; i < rows.length - 1; i++) {
       const currentRow = rows[i];
       const nextRow = rows[i + 1];
@@ -86,6 +86,6 @@ export default async function decorate(block) {
         nextCells[0].setAttribute('colspan', colspanValue);
       }
     }
- ===
+
 
 }
