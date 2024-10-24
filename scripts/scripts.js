@@ -12,7 +12,7 @@ import {
   waitForLCP,
   loadBlocks,
   loadCSS,
-  decorateBookmarkLinks,
+ 
 } from './aem.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
