@@ -145,7 +145,7 @@ loadPage();
 * @param {Element} main The container element
 */
 
-export function decorateBookmarkLinks(main) {
+
   main.querySelectorAll('a').forEach((a) => {
     const href = a.getAttribute('href');
     if (href) {
@@ -155,4 +155,4 @@ export function decorateBookmarkLinks(main) {
       }
     }
   });
-}
+
