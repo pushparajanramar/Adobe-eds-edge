@@ -694,48 +694,12 @@ async function waitForLCP(lcpBlocks) {
   });
 }
 
-export function decorateBookmarkLinks(main) {
-  console.log("decorateBookmarkLinks");
-
-  if (!main) {
-    console.error("No main element provided");
-    return;
-  }
-
-  const anchors = main.querySelectorAll('a');
-  
-  if (anchors.length === 0) {
-    console.warn("No anchor elements found");
-  }
-
-  anchors.forEach((a) => {
-    console.log("Inside decorateBookmarkLinks");
-
-    const href = a.getAttribute('href');
-    console.log(`href:`, href);
-    
-    if (href && href.includes('bookmark')) {
-      try {
-        const relativeUrl = href.replace(/^.*\/\/[^\/]+/, '');
-        a.setAttribute('href', relativeUrl);
-        console.log(`Converted to relative URL: ${relativeUrl}`);
-      } catch (error) {
-        console.error(`Error processing href "${href}":`, error);
-      }
-    }
-  });
-}
 
 
 
 init();
 
-document.addEventListener('DOMContentLoaded', () => {
-  console.log("DOM is loadaing.....");
-    
-  const mainElement = document.querySelector('main'); // or your specific container
-  decorateBookmarkLinks(mainElement);
-});
+
 
 
 export {
