@@ -151,7 +151,15 @@ export function decorateMain(main) {
 * Decorates decorate BookmarkLinks links to absolute.
 * @param {Element} main The container element
 */
+
 export function decorateBookmarkLinks(main) {
-    main.querySelectorAll('a').forEach((a) => {
-        const href = a.getAttribute('href'); if (href) { // Check if the href contains 'bookmark' if (href.includes('bookmark')) { // Convert to a relative URL by removing the domain const relativeUrl = href.replace(/^.*\/\/[^\/]+/, ''); a.setAttribute('href', relativeUrl); console.log(`Converted to relative URL: ${relativeUrl}`); } } });
-        }
+  main.querySelectorAll('a').forEach((a) => {
+    const href = a.getAttribute('href');
+    if (href) {
+      if (href.includes('bookmark')) {
+        const relativeUrl = href.replace(/^.*\/\/[^\/]+/, ''); a.setAttribute('href', relativeUrl);
+        console.log(`Converted to relative URL: ${relativeUrl}`);
+      }
+    }
+  });
+}
