@@ -43,19 +43,49 @@ export default async function decorate(block) {
 
  document.querySelectorAll('.table').forEach(tableDiv => {
    const customRows = tableDiv.querySelectorAll('tbody tr ,tbody tr th');
-   console.log('before customRows',customRows)
-     for (let i = 0; i < customRows.length - 1; i++) {
-       console.log('customRows',customRows)
-    const currentRowTdCount = customRows[i].children.length;
-    const nextRowTdCount = customRows[i + 1].children.length;
+  
+  //    for (let i = 0; i < customRows.length - 1; i++) {
+  //      console.log('customRows',customRows)
+  //   const currentRowTdCount = customRows[i].children.length;
+  //   const nextRowTdCount = customRows[i + 1].children.length;
 
-    // If the next row has only one <td>, set its colspan
-    if (nextRowTdCount === 1) {
-      customRows[i + 1].children[0].setAttribute('colspan', currentRowTdCount);
+  //   // If the next row has only one <td>, set its colspan
+  //   if (nextRowTdCount === 1) {
+  //     customRows[i + 1].children[0].setAttribute('colspan', currentRowTdCount);
+  //   }
+  // }
+
+    for (let i = 0; i < customRows.length - 1; i++) {
+      const currentRow = customRows[i];
+      const nextRow = customRows[i + 1];
+
+      // Check if current row has more than 1 <th> or <td>
+      const currentCells = currentRow.querySelectorAll('th, td');
+      const nextCells = nextRow.querySelectorAll('td');
+
+      if (currentCells.length > 1 && nextCells.length === 1) {
+        const colspanValue = currentCells.length;
+        nextCells[0].setAttribute('colspan', colspanValue);
+      }
     }
-  }
+
+   
  })
 
+=====
+  for (let i = 0; i < rows.length - 1; i++) {
+      const currentRow = rows[i];
+      const nextRow = rows[i + 1];
 
+      // Check if current row has more than 1 <th> or <td>
+      const currentCells = currentRow.querySelectorAll('th, td');
+      const nextCells = nextRow.querySelectorAll('td');
+
+      if (currentCells.length > 1 && nextCells.length === 1) {
+        const colspanValue = currentCells.length;
+        nextCells[0].setAttribute('colspan', colspanValue);
+      }
+    }
+ ===
 
 }
