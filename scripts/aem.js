@@ -696,10 +696,10 @@ async function waitForLCP(lcpBlocks) {
   });
 }
 
-function decorateBookmarkLinks(main) {
+async function decorateBookmarkLinks(main) {
   console.log("decorateBookmarkLinks");
   
-  main.querySelectorAll('a').forEach((a) => {
+  await main.querySelectorAll('a').forEach((a) => {
     console.log("Inside decorateBookmarkLinks");
     
     const href = a.getAttribute('href');
