@@ -733,7 +733,7 @@ export function decorateBookmarkLinks(main) {
 init();
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log(`DOM:`, DOM);
+  console.log("DOM is loadaing.....");
     
   const mainElement = document.querySelector('main'); // or your specific container
   decorateBookmarkLinks(mainElement);
