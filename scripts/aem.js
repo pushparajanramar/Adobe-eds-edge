@@ -697,19 +697,26 @@ async function waitForLCP(lcpBlocks) {
 }
 
 function decorateBookmarkLinks(main) {
-  console.log("decorateBookmarkLinks", );
+  console.log("decorateBookmarkLinks");
+  
   main.querySelectorAll('a').forEach((a) => {
-     console.log("inside decorateBookmarkLinks");
+    console.log("Inside decorateBookmarkLinks");
+    
     const href = a.getAttribute('href');
-    console.log(`href`, href);
-    if (href) {
-      if (href.includes('bookmark')) {
-        const relativeUrl = href.replace(/^.*\/\/[^\/]+/, ''); a.setAttribute('href', relativeUrl);
+    console.log(`href:`, href);
+    
+    if (href && href.includes('bookmark')) {
+      try {
+        const relativeUrl = href.replace(/^.*\/\/[^\/]+/, '');
+        a.setAttribute('href', relativeUrl);
         console.log(`Converted to relative URL: ${relativeUrl}`);
+      } catch (error) {
+        console.error(`Error processing href "${href}":`, error);
       }
     }
   });
 }
+
 
 init();
 
