@@ -12,6 +12,7 @@ import {
   waitForLCP,
   loadBlocks,
   loadCSS,
+  decorateBookmarkLinks,
 } from './aem.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
@@ -137,15 +138,7 @@ async function loadPage() {
 }
 
 loadPage();
-export function decorateMain(main) {
-    // hopefully forward compatible button decoration
-    decorateButtons(main);
-    decorateIcons(main);
-    buildAutoBlocks(main);
-    decorateSections(main);
-    decorateBlocks(main);
-    decorateBookmarkLinks(main)
-}
+
  
 /**
 * Decorates decorate BookmarkLinks links to absolute.
