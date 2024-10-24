@@ -644,7 +644,7 @@ function decorateBlock(block) {
  * @param {Element} main The container element
  */
 function decorateBlocks(main) {
-  console.log("href", );
+  console.log("decorateBlocks code is called here ", );
   main.querySelectorAll('div.section > div > div').forEach(decorateBlock);
 }
 
@@ -696,9 +696,9 @@ async function waitForLCP(lcpBlocks) {
 }
 
 function decorateBookmarkLinks(main) {
-  console.log("href", );
+  console.log("decorateBookmarkLinks", );
   main.querySelectorAll('a').forEach((a) => {
-     console.log("href", main);
+     console.log("inside decorateBookmarkLinks");
     const href = a.getAttribute('href');
     console.log(`href`, href);
     if (href) {
