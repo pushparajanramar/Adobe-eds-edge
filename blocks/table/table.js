@@ -42,5 +42,16 @@ export default async function decorate(block) {
   });
 
 
+ const customTable =  document.querySelectorAll('.table');
+  const customRows = customTable.querySelectorAll('tbody tr');
 
+  for (let i = 0; i < rows.length - 1; i++) {
+    const currentRowTdCount = customRows[i].children.length;
+    const nextRowTdCount = customRows[i + 1].children.length;
+
+    // If the next row has only one <td>, set its colspan
+    if (nextRowTdCount === 1) {
+      customRows[i + 1].children[0].setAttribute('colspan', currentRowTdCount);
+    }
+  }
 }
