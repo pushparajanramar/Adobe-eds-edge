@@ -41,11 +41,9 @@ export default async function decorate(block) {
     lastCell.setAttribute('colspan', colspanValue);
   });
 
-
- const customTable =  document.querySelectorAll('.table');
-  const customRows = customTable.querySelectorAll('tbody tr');
-
-  for (let i = 0; i < rows.length - 1; i++) {
+ document.querySelectorAll('.table').forEach(tableDiv => {
+   const customRows = tableDiv.querySelectorAll('tbody tr');
+     for (let i = 0; i < rows.length - 1; i++) {
     const currentRowTdCount = customRows[i].children.length;
     const nextRowTdCount = customRows[i + 1].children.length;
 
@@ -54,4 +52,8 @@ export default async function decorate(block) {
       customRows[i + 1].children[0].setAttribute('colspan', currentRowTdCount);
     }
   }
+ })
+
+
+
 }
