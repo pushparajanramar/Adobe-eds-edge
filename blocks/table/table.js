@@ -44,7 +44,7 @@ export default async function decorate(block) {
  document.querySelectorAll('.table').forEach(tableDiv => {
    const customRows = tableDiv.querySelectorAll('tbody tr');
    console.log('customRows',customRows)
-     for (let i = 0; i < rows.length - 1; i++) {
+     for (let i = 0; i < customRows.length - 1; i++) {
     const currentRowTdCount = customRows[i].children.length;
     const nextRowTdCount = customRows[i + 1].children.length;
 
