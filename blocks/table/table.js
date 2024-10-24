@@ -1,8 +1,8 @@
-function buildCell(rowIndex, colspan, rowspan) {
+function buildCell(rowIndex, colspan = 1, rowspan = 1) {
   const cell = rowIndex ? document.createElement('td') : document.createElement('th');
   if (!rowIndex) cell.setAttribute('scope', 'col');
-  if (colspan) cell.setAttribute('colspan', colspan);
-  if (rowspan) cell.setAttribute('rowspan', rowspan);
+  if (colspan > 1) cell.setAttribute('colspan', colspan);
+  if (rowspan > 1) cell.setAttribute('rowspan', rowspan);
   return cell;
 }
 
@@ -15,38 +15,35 @@ export default async function decorate(block) {
   if (header) table.append(thead);
   table.append(tbody);
 
-  const rowsData = [...block.children].map(child => {
-    return [...child.children].map(col => col.innerHTML);
-  });
+  const cellMap = new Map();
 
-  const rowSpanCount = {};
-
-  rowsData.forEach((rowData, i) => {
+  [...block.children].forEach((child, i) => {
     const row = document.createElement('tr');
-    if (header && i === 0) thead.append(row);
-    else tbody.append(row);
+    if (header && i === 0) {
+      thead.append(row);
+    } else {
+      tbody.append(row);
+    }
 
-    rowData.forEach((cellData, j) => {
-      const key = `${i}-${j}`;
+    [...child.children].forEach((col, j) => {
+      const content = col.innerHTML;
+      const cell = buildCell(header ? i : i + 1);
 
-      // Handle rowspan by checking if the cell is already occupied
-      if (rowSpanCount[key] && rowSpanCount[key] > 0) {
-        rowSpanCount[key]--;
-        return; // Skip creating a cell if the rowspan has been covered
+      // Check if there's a rowspan/colspan defined
+      const rowspan = col.getAttribute('data-rowspan') || 1;
+      const colspan = col.getAttribute('data-colspan') || 1;
+
+      if (cellMap.has(`${i}-${j}`)) {
+        return; // Skip already occupied cell
       }
 
-      // Check for colspan
-      const colspan = rowData.slice(j + 1).findIndex((data, index) => data === cellData);
-      const rowspan = rowsData.slice(i + 1).findIndex((data) => data[j] === cellData);
-
-      const cell = buildCell(header ? i : i + 1, colspan > 0 ? colspan + 1 : undefined, rowspan > 0 ? rowspan + 1 : undefined);
-      cell.innerHTML = cellData;
+      cell.innerHTML = content;
       row.append(cell);
 
-      // Update rowspan tracking
-      if (rowspan > 0) {
-        for (let k = 1; k <= rowspan; k++) {
-          rowSpanCount[`${i + k}-${j}`] = (rowSpanCount[`${i + k}-${j}`] || 0) + 1;
+      // Mark cells that will be affected by rowspan
+      for (let r = 0; r < rowspan; r++) {
+        for (let c = 0; c < colspan; c++) {
+          cellMap.set(`${i + r}-${j + c}`, true);
         }
       }
     });
