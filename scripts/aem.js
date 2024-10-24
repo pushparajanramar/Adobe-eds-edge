@@ -698,9 +698,21 @@ async function waitForLCP(lcpBlocks) {
 
 export function decorateBookmarkLinks(main) {
   console.log("decorateBookmarkLinks");
-  main.querySelectorAll('a').forEach((a) => {
+
+  if (!main) {
+    console.error("No main element provided");
+    return;
+  }
+
+  const anchors = main.querySelectorAll('a');
+  
+  if (anchors.length === 0) {
+    console.warn("No anchor elements found");
+  }
+
+  anchors.forEach((a) => {
     console.log("Inside decorateBookmarkLinks");
-    
+
     const href = a.getAttribute('href');
     console.log(`href:`, href);
     
@@ -714,11 +726,19 @@ export function decorateBookmarkLinks(main) {
       }
     }
   });
-
 }
 
 
+
 init();
+
+document.addEventListener('DOMContentLoaded', () => {
+  console.log(`DOM:`, DOM);
+    
+  const mainElement = document.querySelector('main'); // or your specific container
+  decorateBookmarkLinks(mainElement);
+});
+
 
 export {
   addLoadingToHeader,
