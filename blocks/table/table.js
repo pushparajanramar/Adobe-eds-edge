@@ -1,57 +1,90 @@
-function buildCell(rowIndex) {
-  const cell = rowIndex
-    ? document.createElement("td")
-    : document.createElement("th");
-  if (!rowIndex) cell.setAttribute("scope", "col");
-  return cell;
-}
-export default async function decorate(block) {
-  const table = document.createElement("table");
-  const thead = document.createElement("thead");
-  const tbody = document.createElement("tbody");
-  const header = !block.classList.contains("no-header");
-  if (header) table.append(thead);
-  table.append(tbody);
-
-  [...block.children].forEach((child, i) => {
-    const row = document.createElement("tr");
-    if (header && i === 0) thead.append(row);
-    else tbody.append(row);
-    [...child.children].forEach((col) => {
-      const cell = buildCell(header ? i : i + 1);
-      cell.innerHTML = col.innerHTML;
-      row.append(cell);
-    });
-  });
-  block.innerHTML = "";
-  block.append(table);
-  document.querySelectorAll(".table").forEach((tableDiv) => {
-    const rows = tableDiv.querySelectorAll("tbody tr");
-    // Ensure there are at least two rows to work with
-    if (rows.length < 2) return;
-    // Get the second-to-last row
-    const secondLastRow = rows[rows.length - 2];
-    const secondLastCells = secondLastRow.querySelectorAll("td");
-    // Count the number of <td> elements in the second-to-last row
-    const colspanValue = secondLastCells.length;
-    // Get the last row
-    const lastRow = rows[rows.length - 1];
-    const lastCell = lastRow.querySelector("td");
-    // Set the colspan attribute on the last cell
-    lastCell.setAttribute("colspan", colspanValue);
-  });
-  document.querySelectorAll(".table").forEach((tableDiv) => {
-    const customRows = tableDiv.querySelectorAll("tbody tr ,tbody tr th");
-    for (let i = 0; i < customRows.length - 1; i++) {
-      const currentRow = customRows[i];
-      const nextRow = customRows[i + 1];
-      // Check if current row has more than 1 <th> or <td>
-      const currentCells = currentRow.querySelectorAll("th, td");
-      const nextCells = nextRow.querySelectorAll("td");
-      if (currentCells.length > 1 && nextCells.length === 1) {
-        const colspanValue = currentCells.length;
-        nextCells[0].setAttribute("colspan", colspanValue);
+function buildMutipleTables(block) {
+  const mainContent = block.parentNode.parentNode;
+  if (mainContent.querySelectorAll(':scope > .flat-table').length < 2) return;
+  const mainChildren = [...mainContent.children];
+  const mainTmp = document.createElement('div');
+  for (let i = 0; i < mainChildren.length; i += 1) {
+    if ((mainChildren[i].classList.contains('flat-table') && i === 0)
+      || (mainChildren[i].classList.contains('flat-table') && !mainChildren[i - 1].classList.contains('flat-table'))) {
+      const multiTable = document.createElement('div');
+      multiTable.classList.add('multiple-table');
+      for (let j = i; j < mainChildren.length; j += 1) {
+        const currentIsFlatTable = mainChildren[j].classList.contains('flat-table');
+        if (currentIsFlatTable && j === mainChildren.length - 1) {
+          multiTable.append(mainChildren[j]);
+          break;
+        }
+        const nextIsFlatTable = mainChildren[j + 1].classList.contains('flat-table');
+        if (currentIsFlatTable && nextIsFlatTable) {
+          multiTable.append(mainChildren[j]);
+        }
+        if (currentIsFlatTable && !nextIsFlatTable) {
+          multiTable.append(mainChildren[j]);
+          i = j;
+          break;
+        }
       }
+      mainTmp.append(multiTable);
+    } else {
+      mainTmp.append(mainChildren[i]);
+    }
+  }
+  mainContent.replaceChildren(...mainTmp.childNodes);
+}
+
+function innerTableHighlightFirstColumn(block, noHead) {
+  const trs = block.querySelectorAll('table tr');
+  const tdNumbArray = [];
+  [...trs].forEach((td) => { tdNumbArray.push(td.children.length); });
+  const tdNumb = Math.max(...tdNumbArray);
+  [...trs].forEach((td, index) => {
+    if (noHead && tdNumb === td.children.length) {
+      td.classList.add('highlight-item');
+    } else if (!noHead && index !== 0 && tdNumb === td.children.length) {
+      td.classList.add('highlight-item');
     }
   });
+}
+
+export default async function decorate(block) {
+  const noHead = block.classList.contains('no-head');
+  const tableDiv = document.createElement('div');
+  tableDiv.classList.add('table-item');
+  const tableTitle = document.createElement('h3');
+  tableTitle.classList.add('table-title');
+  const tableAnnotation = document.createElement('p');
+  tableAnnotation.classList.add('table-annotation');
+  [...block.children].forEach((child, i) => {
+    if (i === 0) {
+      tableTitle.innerHTML = [...child.children][1].innerHTML;
+    } else if (i === 1) {
+      tableAnnotation.innerHTML = [...child.children][1].innerHTML;
+    } else {
+      if (tableDiv.getAttribute('style') === null) {
+        const rowLength = ([...block.children].length - 2).toString();
+        const colLength = ([...child.children].length - 1).toString();
+        tableDiv.setAttribute('style', `--row:${rowLength};--col:${colLength}`);
+      }
+      [...child.children].forEach((childDiv, x) => {
+        if (x) {
+          if (i === 2 && !noHead) childDiv.classList.add('table-head');
+          tableDiv.append(childDiv);
+        }
+      });
+    }
+  });
+  if (tableTitle.innerHTML === '') {
+    block.replaceChildren(tableDiv);
+    if (tableAnnotation.innerHTML !== '') block.append(tableAnnotation);
+  } else {
+    block.replaceChildren(tableTitle);
+    block.append(tableDiv);
+    if (tableAnnotation.innerHTML !== '') block.append(tableAnnotation);
+  }
+  if (block.classList.contains('flat')) block.parentElement.classList.add('flat-table');
+  buildMutipleTables(block);
+  if (block.classList.contains('inner-table')
+   && block.classList.contains('highlight-first-column')) {
+    innerTableHighlightFirstColumn(block, noHead);
+  }
 }
