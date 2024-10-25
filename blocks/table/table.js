@@ -13,7 +13,7 @@ export default async function decorate(block) {
   if (header) table.append(thead);
   table.append(tbody);
   [...block.children].forEach((child, i) => {
-    console.log([...block.children].lenght)
+    console.log([...block.children].length)
 
     const row = document.createElement("tr");
     if (header && i === 0) thead.append(row);
