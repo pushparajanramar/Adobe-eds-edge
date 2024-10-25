@@ -12,7 +12,6 @@ export default async function decorate(block) {
   const header = !block.classList.contains("no-header");
   if (header) table.append(thead);
   table.append(tbody);
-console.log([...block.children])
   [...block.children].forEach((child, i) => {
     console.log([...block.children])
 
