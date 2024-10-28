@@ -16,25 +16,23 @@ export default async function decorate(block) {
 
     [...block.children].forEach((child, i) => {
         const row = document.createElement("tr");
-        if (header && i === 0) {
-            thead.append(row);
-        } else {
-            tbody.append(row);
-        }
+        if (header && i === 0) thead.append(row);
+        else tbody.append(row);
+        
         [...child.children].forEach((col) => {
             const cell = buildCell(header ? i : i + 1);
 
-            // Check for $ sign in the column content
-            const hasDollarSign = col.innerHTML.includes('$');
+            // Check if the cell is a header or a data cell
+            const isHeader = header && i === 0; // Assuming the first row is the header
 
-            // Optionally handle the cell content based on the presence of $ sign
-            if (hasDollarSign) {
-                cell.style.backgroundColor = '#ffcccc'; // Example: highlight cell
+            // Get the content and check for $ signs
+            const cellContent = col.innerHTML;
+            if (cellContent.includes('$')) {
+                console.log('Found $ in cell content:', cellContent);
             }
 
-            // Set the inner HTML of the cell
-            cell.innerHTML = col.innerHTML;
-
+            // Set the innerHTML of the cell
+            cell.innerHTML = cellContent;
             row.append(cell);
         });
     });
