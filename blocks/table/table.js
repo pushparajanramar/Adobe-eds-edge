@@ -70,30 +70,6 @@ function parseDivTable(divTable, parentTable) {
     });
 }
 
-// Functions to run decorateTable for each specific table
-function executeSimpleTable() {
-    const container = document.getElementById('simple-table');
-    const outputContainer = document.getElementById('simple-output');
-    outputContainer.innerHTML = ''; // Clear previous output
-    decorateTable(container, outputContainer);
-}
-
-function executeGroupedHeaderTable() {
-    const container = document.getElementById('grouped-header-table');
-    const outputContainer = document.getElementById('grouped-header-output');
-    outputContainer.innerHTML = ''; // Clear previous output
-    decorateTable(container, outputContainer);
-}
-
-function executeNestedTable() {
-    const container = document.getElementById('nested-table');
-    const outputContainer = document.getElementById('nested-output');
-    outputContainer.innerHTML = ''; // Clear previous output
-    decorateTable(container, outputContainer);
-}
-
-
-
 export default async function decorate(block) {
     const table = document.createElement("table");
     const thead = document.createElement("thead");
@@ -108,6 +84,7 @@ export default async function decorate(block) {
         else tbody.append(row);
         [...child.children].forEach((col) => {
             const cell = buildCell(header ? i : i + 1);
+            cell = Array.from(cell)
            row.forEach((div, index) => {
         const content = div.innerText.trim();
         if (content === '') return; // Skip empty divs
