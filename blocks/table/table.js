@@ -112,7 +112,7 @@ export default async function decorate(block) {
             const textContent = content.replace(/\$.*?\$/g, '').trim(); // Remove $...$ tags from content
 
             // Determine if it's a header or data cell
-            const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
+         cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
             cell.innerHTML = col.innerHTML;
             row.append(cell);
         });
