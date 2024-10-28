@@ -133,8 +133,6 @@ class Table {
 }
 
 
-const { chromium } = require('playwright'); // Make sure to import Playwright
-
 (async () => {
   // Launch the browser and open a new page
   const browser = await chromium.launch();
