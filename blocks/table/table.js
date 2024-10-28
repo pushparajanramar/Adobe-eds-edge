@@ -131,3 +131,36 @@ class Table {
     return sectionRow.locator(`.col-${colIndex}`);
   }
 }
+
+
+const { chromium } = require('playwright'); // Make sure to import Playwright
+
+(async () => {
+  // Launch the browser and open a new page
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+
+  // Navigate to the desired URL
+  await page.goto('https://example.com'); // Replace with your actual URL
+
+  // Create an instance of the Table class
+  const myTable = new Table(page);
+
+  // Example calls to the methods in the Table class
+  try {
+    const highlightRowColumnTitle = await myTable.getHighlightRowColumnTitle(0);
+    const headerColumnTitle = await myTable.getHeaderColumnTitle(1);
+    const headerColumnPricing = await myTable.getHeaderColumnPricing(2);
+    
+    console.log(await highlightRowColumnTitle.textContent()); // Log the content of the highlight row column
+    console.log(await headerColumnTitle.textContent()); // Log the header column title
+    console.log(await headerColumnPricing.textContent()); // Log the pricing information
+
+  } catch (error) {
+    console.error('Error fetching table data:', error);
+  }
+
+  // Close the browser
+  await browser.close();
+})();
+
