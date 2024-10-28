@@ -108,11 +108,15 @@ export default async function decorate(block) {
         else tbody.append(row);
         [...child.children].forEach((col) => {
             const cell = buildCell(header ? i : i + 1);
-            const properties = parseProperties(content);
-            const textContent = content.replace(/\$.*?\$/g, '').trim(); // Remove $...$ tags from content
+           rows.forEach((div, index) => {
+        const content = div.innerText.trim();
+        if (content === '') return; // Skip empty divs
 
-            // Determine if it's a header or data cell
-         cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
+        const properties = parseProperties(content);
+        const textContent = content.replace(/\$.*?\$/g, '').trim(); // Remove $...$ tags from content
+
+        // Determine if it's a header or data cell
+        const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
             cell.innerHTML = col.innerHTML;
             row.append(cell);
         });
