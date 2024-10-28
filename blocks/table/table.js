@@ -132,4 +132,4 @@ class Table {
   }
 }
 
-
+const myTable = new Table();
