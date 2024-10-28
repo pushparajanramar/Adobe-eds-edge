@@ -56,7 +56,7 @@ export default async function decorate(block) {
     }
   });
 
-export default class Table {
+class Table {
   constructor(page, nth = 0) {
     this.page = page;
     console.log('this.page', this.page)
