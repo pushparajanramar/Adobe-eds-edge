@@ -54,6 +54,20 @@ export default async function decorate(block) {
     }
   });
 
+   function parseProperties(content) {
+            const properties = {};
+            const regex = /\$(.*?)\$/g;
+            let match;
+            while ((match = regex.exec(content)) !== null) {
+                const [key, value] = match[1].split('=');
+                properties[key.trim()] = value ? value.trim() : true;
+            }
+            return properties;
+}
 
+  parseProperties(header);
+
+  console.log(parseProperties(header),"parseProperties(header)")
+  
 }
 
