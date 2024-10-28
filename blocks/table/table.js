@@ -54,6 +54,8 @@ export default async function decorate(block) {
     }
   });
 
+
+}
 class Table {
   constructor(page, nth = 0) {
     this.page = page;
@@ -128,5 +130,4 @@ class Table {
     const sectionRow = await this.table.locator('.section-row').nth(rowIndex);
     return sectionRow.locator(`.col-${colIndex}`);
   }
-}
 }
