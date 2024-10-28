@@ -52,9 +52,7 @@ export default async function decorate(block) {
         nextCells[0].setAttribute("colspan", colspanValue);
       }
     }
-  });
-
-   function parseProperties(content) {
+       function parseProperties(content) {
             const properties = {};
             const regex = /\$(.*?)\$/g;
             let match;
@@ -68,6 +66,9 @@ export default async function decorate(block) {
   parseProperties(header);
 
   console.log(parseProperties(header),"parseProperties(header)")
+  });
+
+
   
 }
 
