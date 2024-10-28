@@ -20,19 +20,15 @@ export default async function decorate(block) {
         else tbody.append(row);
         
         [...child.children].forEach((col) => {
-            const cell = buildCell(header ? i : i + 1);
+            const isHeader = header && i === 0; // Check if the current row is the header row
+            const cell = buildCell(isHeader ? 0 : 1); // Use 0 for th and 1 for td
 
-            // Check if the cell is a header or a data cell
-            const isHeader = header && i === 0; // Assuming the first row is the header
+            // Remove $...$ from inner content of the col element
+            const textContent = col.innerHTML.replace(/\$.*?\$/g, '').trim();
 
-            // Get the content and check for $ signs
-            const cellContent = col.innerHTML;
-            if (cellContent.includes('$')) {
-                console.log('Found $ in cell content:', cellContent);
-            }
+            // Set innerHTML or textContent based on header or data cell
+            cell.innerHTML = textContent;
 
-            // Set the innerHTML of the cell
-            cell.innerHTML = cellContent;
             row.append(cell);
         });
     });
@@ -40,3 +36,4 @@ export default async function decorate(block) {
     block.innerHTML = "";
     block.append(table);
 }
+
