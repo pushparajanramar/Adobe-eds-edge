@@ -116,4 +116,4 @@ function parseProperties(content) {
             outputContainer.innerHTML = ''; // Clear previous output
             decorateTable(container, outputContainer);
         }
-}
+
