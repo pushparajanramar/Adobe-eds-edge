@@ -1,4 +1,14 @@
- function parseProperties(content) {
+
+export default async function decorate(block) {
+  const table = document.createElement("table");
+  const thead = document.createElement("thead");
+  const tbody = document.createElement("tbody");
+  const header = !block.classList.contains("no-header");
+
+
+
+
+function parseProperties(content) {
             const properties = {};
             const regex = /\$(.*?)\$/g;
             let match;
@@ -83,3 +93,4 @@
             outputContainer.innerHTML = ''; // Clear previous output
             decorateTable(container, outputContainer);
         }
+}
