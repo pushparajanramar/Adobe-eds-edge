@@ -119,6 +119,7 @@ export default async function decorate(block) {
         cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
             cell.innerHTML = col.innerHTML;
             row.append(cell);
+               });
         });
     });
     block.innerHTML = "";
