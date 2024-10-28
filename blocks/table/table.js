@@ -135,7 +135,7 @@ class Table {
 
 (async () => {
   // Launch the browser and open a new page
-  const browser = await chromium.launch();
+//  const browser = await chromium.launch();
   const page = await browser.newPage();
 
   // Navigate to the desired URL
@@ -159,6 +159,6 @@ class Table {
   }
 
   // Close the browser
-  await browser.close();
+ // await browser.close();
 })();
 
