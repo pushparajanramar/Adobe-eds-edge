@@ -18,8 +18,8 @@ function decorateTable(container, outputContainer) {
     }
 
     const table = document.createElement('table');
-    const thead = document.createElement('thead'); // Create thead
-    const tbody = document.createElement('tbody'); // Create tbody
+    const thead = document.createElement('thead');
+    const tbody = document.createElement('tbody');
     table.appendChild(thead);
     table.appendChild(tbody);
 
@@ -43,13 +43,13 @@ function parseDivTable(divTable, thead, tbody) {
         const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
 
         // Set text content
-        cell.innerText = textContent;
+        cell.innerHTML = textContent.replace(/<br\s*\/?>/gi, '<br>'); // Normalize <br> tags
 
         // Apply colspan and rowspan if specified
         if (properties['data-colspan']) cell.colSpan = properties['data-colspan'];
         if (properties['data-rowspan']) cell.rowSpan = properties['data-rowspan'];
 
-        // Create new row for the header
+        // If it's a header, create a new row in thead
         if (properties['data-type'] === 'header') {
             if (!currentRow) currentRow = document.createElement('tr');
             currentRow.appendChild(cell);
@@ -60,7 +60,7 @@ function parseDivTable(divTable, thead, tbody) {
                 currentRow = null; // Reset for the next header row
             }
         } else {
-            // Create a new row for the body
+            // If it's a body row, create a new row in tbody
             if (!currentRow) currentRow = document.createElement('tr');
             currentRow.appendChild(cell);
 
