@@ -255,5 +255,9 @@ main .section.highlight {
   margin: 0;
   padding: 40px 0;
 }
-
+main .section.blue > div p:first-of-type {
+    background-color: #0070c0; /* Change background color */
+    color: white; /* Change text color for contrast */
+    text-transform: uppercase;
+}
 
