@@ -21,6 +21,7 @@ function decorateTable(container, outputContainer) {
 }
 
 // Recursive function to parse div tables and create rows and cells
+// Recursive function to parse div tables and create rows and cells
 function parseDivTable(divTable, parentTable) {
   const rows = Array.from(divTable.children);
   let currentRow = document.createElement('tr');
@@ -28,12 +29,12 @@ function parseDivTable(divTable, parentTable) {
     const content = div.innerText.trim();
     if (content === '') return; // Skip empty divs
 
-    // Remove $...$ tags from content before parsing properties
+    // Extract properties and clean content
     const propertiesString = content.match(/\$(.*?)\$/g)?.join(' ') || '';
     const properties = parseProperties(propertiesString);
     const textContent = content.replace(/\$.*?\$/g, '').trim(); // Clean content for display
 
-    // Determine if it's a header or data cell
+    // Create the cell element
     const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
     
     // Check for nested table and process it recursively if present
@@ -44,7 +45,7 @@ function parseDivTable(divTable, parentTable) {
       cell.appendChild(nestedTable);
     } else {
       // Set text content if there's no nested table
-      cell.innerText = textContent;
+      cell.innerText = textContent; // Use clean text content
     }
 
     // Apply colspan and rowspan if specified
@@ -61,6 +62,7 @@ function parseDivTable(divTable, parentTable) {
     }
   });
 }
+
 
 function complexTable() {
   const tableDivs = document.querySelectorAll(".complextable div");
