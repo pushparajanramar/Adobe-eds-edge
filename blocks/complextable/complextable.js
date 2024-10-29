@@ -27,35 +27,44 @@ function decorateTable(container, outputContainer) {
 }
 
  function parseDivTable(divTable, parentTable) {
-            const rows = Array.from(divTable.children);
-            let currentRow = document.createElement('tr');
-            rows.forEach((rowDiv) => {
-                const currentRow = document.createElement('tr');
-                const cells = Array.from(rowDiv.children);
+      const rows = Array.from(divTable.children);
+      let currentRow = document.createElement('tr');
 
-                cells.forEach((cellDiv) => {
-                    const content = cellDiv.innerHTML.trim();
-                    if (content === '') return; // Skip empty divs
+      rows.forEach((div, index) => {
+        const content = div.innerText.trim();
+        if (content === '') return; // Skip empty divs
 
-                    const properties = parseProperties(content);
-                    const cellContent = content.replace(/\$.*?\$/g, '').trim(); // Remove $...$ tags from content
+        const properties = parseProperties(content);
+        const textContent = content.replace(/\$.*?\$/g, '').trim(); // Remove $...$ tags from content
 
-                    // Create a cell (either <th> for headers or <td> for regular cells)
-                    const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
-                    cell.innerHTML = cellContent; // Set innerHTML to retain any HTML content
+        // Determine if it's a header or data cell
+        const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
 
-                    // Apply colspan and rowspan if specified
-                    if (properties['data-colspan']) cell.colSpan = properties['data-colspan'];
-                    if (properties['data-rowspan']) cell.rowSpan = properties['data-rowspan'];
-
-                    // Append the cell to the current row
-                    currentRow.appendChild(cell);
-                });
-
-                // Append the row to the table
-                parentTable.appendChild(currentRow);
-            });
+        // Check for nested table and process it recursively if present
+        const nestedTableDiv = div.querySelector('.table-type-container');
+        if (nestedTableDiv) {
+          const nestedTable = document.createElement('table');
+          parseDivTable(nestedTableDiv, nestedTable); // Recursive call for nested table
+          cell.appendChild(nestedTable);
+        } else {
+          // Set text content if there's no nested table
+          cell.innerText = textContent;
         }
+
+        // Apply colspan and rowspan if specified
+        if (properties['data-colspan']) cell.colSpan = properties['data-colspan'];
+        if (properties['data-rowspan']) cell.rowSpan = properties['data-rowspan'];
+
+        // Append the cell to the current row
+        currentRow.appendChild(cell);
+
+        // End the row if specified or if it's the last element
+        if (properties['data-end'] === 'row' || index === rows.length - 1) {
+          parentTable.appendChild(currentRow);
+          currentRow = document.createElement('tr'); // Reset for a new row
+        }
+      });
+    }
 
 export default async function decorate(block) {
   console.log("(block) is working");
