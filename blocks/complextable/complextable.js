@@ -8,6 +8,37 @@ function buildCell(rowIndex, properties) {
 
     return cell;
 }
+function parseDivTable(divTable, parentTable) {
+    const rows = Array.from(divTable.children);
+    let currentRow = document.createElement('tr');
+
+    rows.forEach((div, index) => {
+        const content = div.innerText.trim();
+        if (content === '') return; // Skip empty divs
+
+        const properties = parseProperties(content);
+        const textContent = content.replace(/\$.*?\$/g, '').trim(); // Remove $...$ tags from content
+
+        // Determine cell type based on data-type
+        const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
+
+        // Set text content
+        cell.innerText = textContent;
+
+        // Apply colspan and rowspan if specified
+        if (properties['data-colspan']) cell.colSpan = properties['data-colspan'];
+        if (properties['data-rowspan']) cell.rowSpan = properties['data-rowspan'];
+
+        // Append the cell to the current row
+        currentRow.appendChild(cell);
+
+        // End the row if specified or if it's the last element
+        if (properties['data-end'] === 'row' || index === rows.length - 1) {
+            parentTable.appendChild(currentRow);
+            currentRow = document.createElement('tr'); // Reset for a new row
+        }
+    });
+}
 
 export default async function decorate(block) {
     const table = document.createElement("table");
