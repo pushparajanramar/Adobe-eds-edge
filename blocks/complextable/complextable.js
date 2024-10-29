@@ -77,7 +77,7 @@ export default async function decorate(block) {
     newDiv.appendChild(clonedDiv);
   });
 
-  const outputContainer = document.getElementById('Div1');
+  const outputContainer = container;
   if (!outputContainer) {
     console.error("Output container '#Div1' not found.");
     return;
