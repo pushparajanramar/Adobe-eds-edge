@@ -22,11 +22,12 @@ function decorateTable(container, outputContainer) {
 
  function parseDivTable(divTable, parentTable) {
     const rows = Array.from(divTable.children);
-    let currentRow = document.createElement('tr');
+    let currentRow = document.createElement('tr'); // Initialize a new row for table
+    let isHeaderRow = true; // To track if the current row is a header row
 
     rows.forEach((rowDiv) => {
         const cells = Array.from(rowDiv.children);
-        let isEndRow = false; // Flag to track if we've reached an end row marker
+        let isEndRow = false; // Flag to check if we've hit an end row marker
 
         cells.forEach((cellDiv) => {
             const content = cellDiv.innerHTML.trim();
@@ -36,7 +37,7 @@ function decorateTable(container, outputContainer) {
             const cellContent = content.replace(/\$.*?\$/g, '').trim(); // Remove $...$ tags from content
 
             // Create a cell (either <th> for headers or <td> for regular cells)
-            const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
+            const cell = isHeaderRow ? document.createElement('th') : document.createElement('td');
             cell.innerHTML = cellContent; // Set innerHTML to retain any HTML content
 
             // Apply colspan and rowspan if specified
@@ -49,10 +50,11 @@ function decorateTable(container, outputContainer) {
             // Check for end row marker
             if (properties['data-end'] === 'row') {
                 isEndRow = true; // Mark that we've reached the end of this row
+                isHeaderRow = false; // Next row should be regular data row
             }
         });
 
-        // If we reached the end of a row, append the current row to the table and create a new row
+        // If we reached the end of a row, append the current row to the table
         if (isEndRow) {
             parentTable.appendChild(currentRow);
             currentRow = document.createElement('tr'); // Reset for the next row
