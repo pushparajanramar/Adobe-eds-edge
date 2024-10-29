@@ -35,7 +35,7 @@ function parseDivTable(divTable, parentTable) {
         const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
 
         // Check for nested table and process it recursively if present
-        const nestedTableDiv = div.querySelector('.table-type-container');
+        const nestedTableDiv = div.querySelector('.complextable');
         if (nestedTableDiv) {
           const nestedTable = document.createElement('table');
           parseDivTable(nestedTableDiv, nestedTable); // Recursive call for nested table
