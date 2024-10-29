@@ -75,7 +75,7 @@ function complexTable() {
 
   // Create a new div element with a unique ID
   const custumID = document.createElement('div');
-  const uniqueId = 'newDivId' + Date.now(); // Generate a unique ID
+  const uniqueId = 'eds' + Date.now(); // Generate a unique ID
   custumID.id = uniqueId; 
 
   const wrapper = document.querySelector('.complextable-wrapper');
