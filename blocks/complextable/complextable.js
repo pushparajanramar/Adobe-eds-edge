@@ -58,6 +58,7 @@ function parseDivTable(divTable, parentTable) {
 // Main export function
 export default async function decorate(block) {
     const outputContainer = document.createElement("div"); // Create a container for the table
+    outputContainer.className = "table-container";
     decorateTable(block, outputContainer);
 
     // Clear the original block content and append the new table
