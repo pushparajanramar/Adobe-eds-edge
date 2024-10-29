@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", (event) => {
   console.log("DOM fully loaded and parsed");
- const g = document.createElement('div');
+var g = document.createElement('div');
          g.setAttribute("id", "Div1");
       
 });
