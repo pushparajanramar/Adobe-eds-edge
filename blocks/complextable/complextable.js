@@ -62,8 +62,6 @@ function parseDivTable(divTable, parentTable) {
 
 export default async function decorate(block) {
   console.log("(block) is working");
-  
-  function complexTable() {
       const tableDivs = document.querySelectorAll(".complextable div");
       var newDiv = document.createElement('div');
       [...tableDivs].forEach((div, index) => {
@@ -77,7 +75,5 @@ export default async function decorate(block) {
       wrapper.insertAdjacentElement('afterend', custumID);
       const outputContainer = document.getElementById('newDivId');
       outputContainer.innerHTML = ''; // Clear previous output
-      decorateTable(newDiv, outputContainer);
-    }
-  decorateTable(newDiv, outputContainer);
+     decorateTable(newDiv, outputContainer);
 }
