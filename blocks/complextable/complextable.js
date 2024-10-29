@@ -1,13 +1,15 @@
-function buildCell(rowIndex, properties) {
-    const cell = rowIndex ? document.createElement("td") : document.createElement("th");
-    if (!rowIndex) cell.setAttribute("scope", "col");
-    
-    // Set colspan or rowspan if specified
-    if (properties['data-colspan']) cell.colSpan = properties['data-colspan'];
-    if (properties['data-rowspan']) cell.rowSpan = properties['data-rowspan'];
-
-    return cell;
+function parseProperties(content) {
+    const properties = {};
+    const matches = content.match(/\$(.*?)\$/g);
+    if (matches) {
+        matches.forEach(match => {
+            const [key, value] = match.replace(/\$/g, '').split('=');
+            properties[key.trim()] = value ? value.trim() : true; // Handle true/false values
+        });
+    }
+    return properties;
 }
+
 function parseDivTable(divTable, parentTable) {
     const rows = Array.from(divTable.children);
     let currentRow = document.createElement('tr');
@@ -19,20 +21,22 @@ function parseDivTable(divTable, parentTable) {
         const properties = parseProperties(content);
         const textContent = content.replace(/\$.*?\$/g, '').trim(); // Remove $...$ tags from content
 
-        // Determine cell type based on data-type
         const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
 
-        // Set text content
-        cell.innerText = textContent;
+        const nestedTableDiv = div.querySelector('.table-type-container');
+        if (nestedTableDiv) {
+            const nestedTable = document.createElement('table');
+            parseDivTable(nestedTableDiv, nestedTable); // Recursive call for nested table
+            cell.appendChild(nestedTable);
+        } else {
+            cell.innerText = textContent;
+        }
 
-        // Apply colspan and rowspan if specified
         if (properties['data-colspan']) cell.colSpan = properties['data-colspan'];
         if (properties['data-rowspan']) cell.rowSpan = properties['data-rowspan'];
 
-        // Append the cell to the current row
         currentRow.appendChild(cell);
 
-        // End the row if specified or if it's the last element
         if (properties['data-end'] === 'row' || index === rows.length - 1) {
             parentTable.appendChild(currentRow);
             currentRow = document.createElement('tr'); // Reset for a new row
@@ -41,41 +45,27 @@ function parseDivTable(divTable, parentTable) {
 }
 
 export default async function decorate(block) {
-    const table = document.createElement("table");
-    const thead = document.createElement("thead");
-    const tbody = document.createElement("tbody");
-    const hasHeader = !block.classList.contains("no-header");
-    
-    if (hasHeader) table.append(thead);
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    const tbody = document.createElement('tbody');
+
+    table.append(thead);
     table.append(tbody);
 
-    [...block.children].forEach((child, i) => {
-        const row = document.createElement("tr");
-        const isHeaderRow = hasHeader && i === 0;
-        
-        if (isHeaderRow) thead.append(row);
-        else tbody.append(row);
-        
-        [...child.children].forEach(col => {
-            const properties = parseProperties(col.innerText);
-            const cell = buildCell(isHeaderRow ? 0 : 1, properties);
-            
-            // Remove $...$ tags for display text
-            const cellText = col.innerText.replace(/\$.*?\$/g, '').trim();
-            cell.innerText = cellText;
+    parseDivTable(block, thead); // Pass block to parseDivTable for header processing
+    parseDivTable(block, tbody); // Process body separately if needed
+document.addEventListener('DOMContentLoaded', () => {
+    const tableCells = document.querySelectorAll('.complextable th, .complextable td');
 
-            // Check for nested tables
-            const nestedTableDiv = col.querySelector('.complextable');
-            if (nestedTableDiv) {
-                const nestedTable = document.createElement('table');
-                parseDivTable(nestedTableDiv, nestedTable); // Recursion for nested tables
-                cell.appendChild(nestedTable);
-            }
-            
-            row.append(cell);
-        });
+    tableCells.forEach(cell => {
+        // Replace <br> with <div> to ensure each item is on a new line
+        cell.innerHTML = cell.innerHTML.replace(/<br\s*\/?>/g, '</div><div>');
+        
+        // Wrap the content in a <div> to format it correctly
+        cell.innerHTML = `<div>${cell.innerHTML}</div>`;
     });
-    
-    block.innerHTML = "";
-    block.append(table);
+});
+
+    block.innerHTML = ''; // Clear the original content
+    block.append(table); // Append the constructed table
 }
