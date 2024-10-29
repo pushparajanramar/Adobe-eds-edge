@@ -85,7 +85,8 @@ function complexTable() {
         });
       });
       block.innerHTML = "";
-     complexTable()
+    
       block.append(table);
+    complexTable()
      
     }
