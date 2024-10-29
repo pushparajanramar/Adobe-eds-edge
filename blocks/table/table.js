@@ -20,7 +20,7 @@ function buildCell(rowIndex, properties) {
     return cell;
 }
 
-async function decorate(block) {
+export default async function decorate(block) {
   console.log("Table ")
     const table = document.createElement("table");
     const thead = document.createElement("thead");
