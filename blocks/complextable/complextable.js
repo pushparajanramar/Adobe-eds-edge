@@ -4,49 +4,35 @@ function parseProperties(content) {
     if (matches) {
         matches.forEach(match => {
             const [key, value] = match.replace(/\$/g, '').split('=');
-            properties[key.trim()] = value ? value.trim() : true; // Handle true/false values
+            properties[key.trim()] = value ? value.trim() : true;
         });
     }
     return properties;
 }
 
-function parseDivTable(divTable, parentTable) {
+function parseDivTable(divTable, parentTable, isHeader = false) {
     const rows = Array.from(divTable.children);
-    let currentRow = document.createElement('tr');
+    
+    rows.forEach(div => {
+        const cells = Array.from(div.children);
+        const rowElement = document.createElement(isHeader ? 'tr' : 'tr'); // Create a new row
 
-    rows.forEach((div, index) => {
-        const content = div.innerText.trim();
-        if (content === '') return; // Skip empty divs
+        cells.forEach(cell => {
+            const properties = parseProperties(cell.innerText);
+            const cellElement = isHeader ? document.createElement('th') : document.createElement('td');
 
-        const properties = parseProperties(content);
-        const textContent = content.replace(/\$.*?\$/g, '').trim(); // Remove $...$ tags from content
+            // Handle line breaks and remove extra spaces
+            const textContent = cell.innerHTML.replace(/<br\s*\/?>/gi, ' ').trim();
+            cellElement.innerHTML = textContent;
 
-        // Determine if it's a header or data cell based on parsed properties
-        const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
+            // Apply colspan and rowspan if specified
+            if (properties['data-colspan']) cellElement.colSpan = properties['data-colspan'];
+            if (properties['data-rowspan']) cellElement.rowSpan = properties['data-rowspan'];
 
-        // Check for nested table and process it recursively if present
-        const nestedTableDiv = div.querySelector('.table-type-container');
-        if (nestedTableDiv) {
-            const nestedTable = document.createElement('table');
-            parseDivTable(nestedTableDiv, nestedTable); // Recursive call for nested table
-            cell.appendChild(nestedTable);
-        } else {
-            // Set text content if there's no nested table
-            cell.innerText = textContent;
-        }
+            rowElement.appendChild(cellElement);
+        });
 
-        // Apply colspan and rowspan if specified
-        if (properties['data-colspan']) cell.colSpan = properties['data-colspan'];
-        if (properties['data-rowspan']) cell.rowSpan = properties['data-rowspan'];
-
-        // Append the cell to the current row
-        currentRow.appendChild(cell);
-
-        // End the row if specified or if it's the last element
-        if (properties['data-end'] === 'row' || index === rows.length - 1) {
-            parentTable.appendChild(currentRow);
-            currentRow = document.createElement('tr'); // Reset for a new row
-        }
+        parentTable.appendChild(rowElement); // Append the constructed row to the parent table
     });
 }
 
@@ -55,12 +41,16 @@ export default async function decorate(block) {
     const thead = document.createElement('thead');
     const tbody = document.createElement('tbody');
 
+    // Assuming the first child is the header section
+    const headerDiv = block.querySelector('thead');
+    const bodyDiv = block.querySelector('tbody');
+
+    parseDivTable(headerDiv, thead, true); // Pass header div for header processing
+    parseDivTable(bodyDiv, tbody, false); // Process body separately for rows
+
     table.append(thead);
     table.append(tbody);
 
-    parseDivTable(block, thead); // Pass block to parseDivTable for header processing
-    parseDivTable(block, tbody); // Process body separately if needed
-
-    block.innerHTML = '';
-    block.append(table);
+    block.innerHTML = ''; // Clear the original content
+    block.append(table); // Append the constructed table
 }
