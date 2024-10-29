@@ -72,11 +72,11 @@ function parseDivTable(divTable, parentTable) {
       });
       // Create a new div element
       const custumID = document.createElement('div');
-      custumID.id = 'newDivId'; // replace 'newDivId' with your desired ID
+      custumID.id = 'newDivId'+1; // replace 'newDivId' with your desired ID
       const wrapper = document.querySelector('.complextable-wrapper');
       // Append the new div after the wrapper
       wrapper.insertAdjacentElement('afterend', custumID);
-      const outputContainer = document.getElementById('newDivId');
+      const outputContainer = document.getElementById('custumID');
       outputContainer.innerHTML = ''; // Clear previous output
       decorateTable(newDiv, outputContainer);
     }
