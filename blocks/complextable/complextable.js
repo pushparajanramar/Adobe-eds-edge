@@ -79,7 +79,7 @@ export default async function decorate(block) {
       // Create a new div element
        var g = document.createElement('div');
          g.setAttribute("id", "Div1");
-      const container = document.getElementById(g);
+      const container =  document.querySelector(".complextable")
       const outputContainer = document.getElementById('Div1'); //for output 
       outputContainer.innerHTML = ''; // Clear previous output
 
