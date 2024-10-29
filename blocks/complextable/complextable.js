@@ -26,39 +26,36 @@ function decorateTable(container, outputContainer) {
   outputContainer.appendChild(table);
 }
 
-function parseDivTable(divTable, parentTable) {
-  const rows = Array.from(divTable.children);
-  let currentRow = document.createElement('tr');
+ function parseDivTable(divTable, parentTable) {
+            const rows = Array.from(divTable.children);
 
-  rows.forEach((div, index) => {
-    const content = div.innerText.trim();
-    if (content === '') return; // Skip empty divs
+            rows.forEach((rowDiv) => {
+                const currentRow = document.createElement('tr');
+                const cells = Array.from(rowDiv.children);
 
-    const properties = parseProperties(content);
-    const textContent = content.replace(/\$.*?\$/g, '').trim();
+                cells.forEach((cellDiv) => {
+                    const content = cellDiv.innerHTML.trim();
+                    if (content === '') return; // Skip empty divs
 
-    const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
+                    const properties = parseProperties(content);
+                    const cellContent = content.replace(/\$.*?\$/g, '').trim(); // Remove $...$ tags from content
 
-    const nestedTableDiv = div.querySelector('.complextable');
-    if (nestedTableDiv) {
-      const nestedTable = document.createElement('table');
-      parseDivTable(nestedTableDiv, nestedTable);
-      cell.appendChild(nestedTable);
-    } else {
-      cell.innerText = textContent;
-    }
+                    // Create a cell (either <th> for headers or <td> for regular cells)
+                    const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
+                    cell.innerHTML = cellContent; // Set innerHTML to retain any HTML content
 
-    if (properties['data-colspan']) cell.colSpan = properties['data-colspan'];
-    if (properties['data-rowspan']) cell.rowSpan = properties['data-rowspan'];
+                    // Apply colspan and rowspan if specified
+                    if (properties['data-colspan']) cell.colSpan = properties['data-colspan'];
+                    if (properties['data-rowspan']) cell.rowSpan = properties['data-rowspan'];
 
-    currentRow.appendChild(cell);
+                    // Append the cell to the current row
+                    currentRow.appendChild(cell);
+                });
 
-    if (properties['data-end'] === 'row' || index === rows.length - 1) {
-      parentTable.appendChild(currentRow);
-      currentRow = document.createElement('tr');
-    }
-  });
-}
+                // Append the row to the table
+                parentTable.appendChild(currentRow);
+            });
+        }
 
 export default async function decorate(block) {
   console.log("(block) is working");
