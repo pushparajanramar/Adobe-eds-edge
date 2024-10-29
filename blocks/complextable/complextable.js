@@ -10,30 +10,26 @@ function parseProperties(content) {
     return properties;
 }
 
-function parseDivTable(divTable, parentTable, isHeader = false) {
-    const rows = Array.from(divTable.children);
-    
-    rows.forEach(div => {
-        const cells = Array.from(div.children);
-        const rowElement = document.createElement(isHeader ? 'tr' : 'tr'); // Create a new row
+function parseRow(row, isHeader) {
+    const cells = Array.from(row.children);
+    const rowElement = document.createElement('tr');
 
-        cells.forEach(cell => {
-            const properties = parseProperties(cell.innerText);
-            const cellElement = isHeader ? document.createElement('th') : document.createElement('td');
+    cells.forEach(cell => {
+        const properties = parseProperties(cell.innerText);
+        const cellElement = isHeader ? document.createElement('th') : document.createElement('td');
 
-            // Handle line breaks and remove extra spaces
-            const textContent = cell.innerHTML.replace(/<br\s*\/?>/gi, ' ').trim();
-            cellElement.innerHTML = textContent;
+        // Handle line breaks and remove extra spaces
+        const textContent = cell.innerHTML.replace(/<br\s*\/?>/gi, ' ').trim();
+        cellElement.innerHTML = textContent;
 
-            // Apply colspan and rowspan if specified
-            if (properties['data-colspan']) cellElement.colSpan = properties['data-colspan'];
-            if (properties['data-rowspan']) cellElement.rowSpan = properties['data-rowspan'];
+        // Apply colspan and rowspan if specified
+        if (properties['data-colspan']) cellElement.colSpan = properties['data-colspan'];
+        if (properties['data-rowspan']) cellElement.rowSpan = properties['data-rowspan'];
 
-            rowElement.appendChild(cellElement);
-        });
-
-        parentTable.appendChild(rowElement); // Append the constructed row to the parent table
+        rowElement.appendChild(cellElement);
     });
+
+    return rowElement; // Return the constructed row
 }
 
 export default async function decorate(block) {
@@ -41,12 +37,19 @@ export default async function decorate(block) {
     const thead = document.createElement('thead');
     const tbody = document.createElement('tbody');
 
-    // Assuming the first child is the header section
-    const headerDiv = block.querySelector('thead');
-    const bodyDiv = block.querySelector('tbody');
+    // Process header rows
+    const headerRows = block.querySelectorAll('thead tr');
+    headerRows.forEach(headerRow => {
+        const rowElement = parseRow(headerRow, true); // Pass true for header
+        thead.appendChild(rowElement);
+    });
 
-    parseDivTable(headerDiv, thead, true); // Pass header div for header processing
-    parseDivTable(bodyDiv, tbody, false); // Process body separately for rows
+    // Process body rows
+    const bodyRows = block.querySelectorAll('tbody tr');
+    bodyRows.forEach(bodyRow => {
+        const rowElement = parseRow(bodyRow, false); // Pass false for body
+        tbody.appendChild(rowElement);
+    });
 
     table.append(thead);
     table.append(tbody);
