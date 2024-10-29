@@ -28,7 +28,7 @@ function decorateTable(container, outputContainer) {
 
  function parseDivTable(divTable, parentTable) {
             const rows = Array.from(divTable.children);
-
+            let currentRow = document.createElement('tr');
             rows.forEach((rowDiv) => {
                 const currentRow = document.createElement('tr');
                 const cells = Array.from(rowDiv.children);
