@@ -65,15 +65,18 @@ function parseDivTable(divTable, parentTable) {
 
 
 function complexTable() {
+  const customID = document.createElement('div');
+  customID.setAttribute("id", "nested-output");
+  console.log(customID,"customID")
+  
   const tableDivs = document.querySelectorAll(".complextable div");
+  customID.appendChild(tableDivs);
   var newDiv = document.createElement('div');
   [...tableDivs].forEach((div) => {
     newDiv.appendChild(div);
   });
 
-const g = document.createElement('div');
-  g.setAttribute("id", "nested-output");
-  console.log(g,"g")
+
   const outputContainer = document.getElementById('nested-output');
   outputContainer.innerHTML = ''; // Clear previous output
   decorateTable(newDiv, outputContainer);
