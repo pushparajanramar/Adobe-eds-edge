@@ -64,23 +64,22 @@ function parseDivTable(divTable, parentTable) {
 }
 
 
-function complexTable() {
-  const customID = document.createElement('div');
-  customID.setAttribute("id", "nested-output");
-  console.log(customID,"customID")
-  
-  const tableDivs = document.querySelectorAll(".complextable div");
-  customID.appendChild(tableDivs);
-  var newDiv = document.createElement('div');
-  [...tableDivs].forEach((div) => {
-    newDiv.appendChild(div);
-  });
-
-
-  const outputContainer = document.getElementById('nested-output');
-  outputContainer.innerHTML = ''; // Clear previous output
-  decorateTable(newDiv, outputContainer);
-}
+ function complexTable() {
+      const tableDivs = document.querySelectorAll(".complextable div");
+      var newDiv = document.createElement('div');
+      [...tableDivs].forEach((div, index) => {
+        newDiv.appendChild(div);
+      });
+      // Create a new div element
+      const custumID = document.createElement('div');
+      custumID.id = 'newDivId'; // replace 'newDivId' with your desired ID
+      const wrapper = document.querySelector('.complextable-wrapper');
+      // Append the new div after the wrapper
+      wrapper.insertAdjacentElement('afterend', custumID);
+      const outputContainer = document.getElementById('newDivId');
+      outputContainer.innerHTML = ''; // Clear previous output
+      decorateTable(newDiv, outputContainer);
+    }
 
  
 
