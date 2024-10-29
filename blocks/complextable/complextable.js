@@ -63,37 +63,6 @@ function parseDivTable(divTable, parentTable) {
   });
 }
 
-
-function complexTable() {
-  const tableDivs = document.querySelectorAll(".complextable div");
-  const newDiv = document.createElement('div');
-
-  // Move all divs to newDiv
-  [...tableDivs].forEach(div => {
-    newDiv.appendChild(div);
-  });
-
-  // Create a new div element with a unique ID
-  const custumID = document.createElement('div');
-  const uniqueId = 'eds' + Date.now(); // Generate a unique ID
-  custumID.id = uniqueId; 
-
-  const wrapper = document.querySelector('.complextable-wrapper');
-  // Append the new div after the wrapper
-  wrapper.insertAdjacentElement('afterend', custumID);
-
-  // Clear previous output and append newDiv to custumID
-  custumID.innerHTML = ''; 
-  custumID.appendChild(newDiv);
-
-  // Call decorateTable with the correct parameters
-  decorateTable(newDiv, custumID);
-}
-
-
- 
-
-
 function buildCell(rowIndex) {
   const cell = rowIndex ? document.createElement("td") : document.createElement("th");
   if (!rowIndex) cell.setAttribute("scope", "col");
@@ -119,8 +88,31 @@ export default async function decorate(block) {
       row.append(cell);
     });
   });
+   const tableDivs = document.querySelectorAll(".complextable div");
+  const newDiv = document.createElement('div');
+
+  // Move all divs to newDiv
+  [...tableDivs].forEach(div => {
+    newDiv.appendChild(div);
+  });
+
+  // Create a new div element with a unique ID
+  const custumID = document.createElement('div');
+  const uniqueId = 'eds' + Date.now(); // Generate a unique ID
+  custumID.id = uniqueId; 
+
+  const wrapper = document.querySelector('.complextable-wrapper');
+  // Append the new div after the wrapper
+  wrapper.insertAdjacentElement('afterend', custumID);
+
+  // Clear previous output and append newDiv to custumID
+  custumID.innerHTML = ''; 
+  custumID.appendChild(newDiv);
+
+  // Call decorateTable with the correct parameters
+  decorateTable(newDiv, custumID);
   block.innerHTML = "";
   block.append(table);
-  complexTable();
+ 
 }
  
