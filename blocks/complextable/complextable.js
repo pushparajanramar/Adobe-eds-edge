@@ -73,6 +73,7 @@ function complexTable() {
 
 const g = document.createElement('div');
   g.setAttribute("id", "nested-output");
+  console.log(g,"g")
   const outputContainer = document.getElementById('nested-output');
   outputContainer.innerHTML = ''; // Clear previous output
   decorateTable(newDiv, outputContainer);
