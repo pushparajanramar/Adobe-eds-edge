@@ -76,7 +76,7 @@ function parseDivTable(divTable, parentTable) {
       const wrapper = document.querySelector('.complextable-wrapper');
       // Append the new div after the wrapper
       wrapper.insertAdjacentElement('afterend', custumID);
-      const outputContainer = document.getElementById('custumID');
+      const outputContainer = document.getElementById(custumID);
       outputContainer.innerHTML = ''; // Clear previous output
       decorateTable(newDiv, outputContainer);
     }
