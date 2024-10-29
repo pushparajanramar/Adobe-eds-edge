@@ -72,17 +72,24 @@ function complexTable() {
   [...tableDivs].forEach((div) => {
     newDiv.appendChild(div);
   });
+
+const g = document.createElement('div');
+  g.setAttribute("id", "nested-output");
   const outputContainer = document.getElementById('nested-output');
+  outputContainer.innerHTML = ''; // Clear previous output
   decorateTable(newDiv, outputContainer);
 }
+
+  // Your complexTable function call or any other initialization code here
+});
+
 
 function buildCell(rowIndex) {
   const cell = rowIndex ? document.createElement("td") : document.createElement("th");
   if (!rowIndex) cell.setAttribute("scope", "col");
   return cell;
 }
- // Your complexTable function call or any other initialization code here
-});
+ 
 export default async function decorate(block) {
   const table = document.createElement("table");
   const thead = document.createElement("thead");
