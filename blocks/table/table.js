@@ -6,7 +6,7 @@ function buildCell(rowIndex, isHeader, colspan) {
 }
 
 export default async function decorate(block) {
-  const tables = [...block.querySelectorAll(".table")];
+  const tables = [...block.querySelectorAll(".table table")];
 
   tables.forEach((tableContainer) => {
     const table = document.createElement("table");
