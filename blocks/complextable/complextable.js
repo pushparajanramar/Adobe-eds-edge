@@ -58,8 +58,7 @@ function complexTable() {
         newDiv.appendChild(div);
       });
       const outputContainer = document.getElementById('nested-output');
-      outputContainer.innerHTML = ''; // Clear previous output
-      decorateTable(newDiv, outputContainer);
+        decorateTable(newDiv, outputContainer);
     }
     function buildCell(rowIndex) {
       const cell = rowIndex
