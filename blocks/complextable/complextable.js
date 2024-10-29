@@ -1,5 +1,3 @@
-document.addEventListener('DOMContentLoaded', () => {
-
 function parseProperties(content) {
   const properties = {};
   const regex = /\$(.*?)\$/g;
@@ -80,8 +78,7 @@ const g = document.createElement('div');
   decorateTable(newDiv, outputContainer);
 }
 
-  // Your complexTable function call or any other initialization code here
-});
+ 
 
 
 function buildCell(rowIndex) {
