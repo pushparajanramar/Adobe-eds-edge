@@ -102,5 +102,5 @@ export default async function decorate(block) {
 
   // Call the decorateTable function to create the table
   decorateTable(newDiv, outputContainer);
-
+      }
 }
