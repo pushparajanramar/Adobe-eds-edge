@@ -16,7 +16,7 @@ export default async function decorate(block) {
   table.append(tbody);
   
   const rows = [...block.children];
-
+ console.log("complextable is working here ",rows)
   let currentRow = null;
 
   rows.forEach((child) => {
