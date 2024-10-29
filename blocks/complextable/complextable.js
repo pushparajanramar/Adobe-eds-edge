@@ -1,4 +1,13 @@
- function buildCell(rowIndex) {
+document.addEventListener("DOMContentLoaded", (event) => {
+  console.log("DOM fully loaded and parsed");
+ const g = document.createElement('div');
+         g.setAttribute("id", "Div1");
+      
+});
+
+
+
+function buildCell(rowIndex) {
       const cell = rowIndex
         ? document.createElement("td")
         : document.createElement("th");
@@ -77,11 +86,9 @@ export default async function decorate(block) {
         newDiv.appendChild(div);
       });
       // Create a new div element
-      const custumID = document.createElement('div');
-      custumID.id = 'simple-table'; // replace 'newDivId' with your desired ID
-      
-      const container = document.getElementById('custumID');
-      const outputContainer = document.getElementById('simple-output'); //for output 
+     
+      const container = document.getElementById(g);
+      const outputContainer = document.getElementById('Div1'); //for output 
       outputContainer.innerHTML = ''; // Clear previous output
 
 
