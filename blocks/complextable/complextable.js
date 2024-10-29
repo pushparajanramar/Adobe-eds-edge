@@ -1,68 +1,71 @@
-function buildCell(rowIndex, isHeader, colspan) {
-  const cell = isHeader ? document.createElement("th") : document.createElement("td");
-  if (colspan > 1) cell.setAttribute("colspan", colspan);
-  if (!rowIndex) cell.setAttribute("scope", "col");
-  return cell;
+function parseProperties(content) {
+    const properties = {};
+    const matches = content.match(/\$(.*?)\$/g);
+    if (matches) {
+        matches.forEach(match => {
+            const [key, value] = match.replace(/\$/g, '').split('=');
+            properties[key.trim()] = value ? value.trim() : true; // Handle true/false values
+        });
+    }
+    return properties;
+}
+
+function parseDivTable(divTable, parentTable) {
+    const rows = Array.from(divTable.children);
+    let currentRow = document.createElement('tr');
+
+    rows.forEach((div, index) => {
+        const content = div.innerText.trim();
+        if (content === '') return; // Skip empty divs
+
+        const properties = parseProperties(content);
+        const textContent = content.replace(/\$.*?\$/g, '').trim(); // Remove $...$ tags from content
+
+        // Determine if it's a header or data cell based on parsed properties
+        const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
+
+        // Check for nested table and process it recursively if present
+        const nestedTableDiv = div.querySelector('.table-type-container');
+        if (nestedTableDiv) {
+            const nestedTable = document.createElement('table');
+            parseDivTable(nestedTableDiv, nestedTable); // Recursive call for nested table
+            cell.appendChild(nestedTable);
+        } else {
+            // Set text content if there's no nested table
+            cell.innerText = textContent;
+        }
+
+        // Apply colspan and rowspan if specified
+        if (properties['data-colspan']) cell.colSpan = properties['data-colspan'];
+        if (properties['data-rowspan']) cell.rowSpan = properties['data-rowspan'];
+
+        // Append the cell to the current row
+        currentRow.appendChild(cell);
+
+        // End the row if specified or if it's the last element
+        if (properties['data-end'] === 'row' || index === rows.length - 1) {
+            parentTable.appendChild(currentRow);
+            currentRow = document.createElement('tr'); // Reset for a new row
+        }
+    });
 }
 
 export default async function decorate(block) {
-   console.log("complextable is working here ")
-  const table = document.createElement("table");
-  const thead = document.createElement("thead");
-  const tbody = document.createElement("tbody");
-  const header = !block.classList.contains("no-header");
-  
-  if (header) table.append(thead);
-  table.append(tbody);
-  
-  const rows = [...block.children];
- console.log("complextable is working here ",rows)
-  let currentRow = null;
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    const tbody = document.createElement('tbody');
+  console.log("complextable is working here ",table)
+    table.append(thead);
+    table.append(tbody);
 
-  rows.forEach((child) => {
-    const divText = child.textContent.trim();
-    const isHeader = divText.includes("$data-type=header$");
-    const isEndRow = divText.includes("$data-end=row$");
-    const colspanMatch = divText.match(/\$data-colspan=(\d+)\$/);
-    const colspan = colspanMatch ? parseInt(colspanMatch[1], 10) : 1;
+    parseDivTable(block, thead); // Pass block to parseDivTable for header processing
+    parseDivTable(block, tbody); // Process body separately if needed
 
-    // Create a new row if this is a new header or end of row
-    if (isHeader || isEndRow) {
-      if (currentRow) tbody.append(currentRow); // Add the previous row to tbody if it exists
-      currentRow = document.createElement("tr");
-      if (isHeader) thead.append(currentRow); // Append to thead if it's a header
-    }
-    
-    // Build the cell
-    const cell = buildCell(currentRow && currentRow.children.length === 0 && isHeader, isHeader, colspan);
-    cell.innerHTML = divText.replace(/\$.*?\$/, "").trim(); // Clean the cell text from special attributes
-    currentRow.append(cell);
-    
-    // If it's the end of a row, append the currentRow to the appropriate section
-    if (isEndRow) {
-      tbody.append(currentRow);
-      currentRow = null; // Reset currentRow for the next iteration
-    }
-  });
-
-  // Handle colspan adjustments and other post-processing
-  adjustColspans(table);
+    block.innerHTML = '';
+    block.append(table);
 }
 
-function adjustColspans(table) {
-  const rows = table.querySelectorAll("tbody tr");
-  if (rows.length < 2) return;
-  
-  const secondLastRow = rows[rows.length - 2];
-  const secondLastCells = secondLastRow.querySelectorAll("td");
-  const colspanValue = secondLastCells.length;
-  const lastRow = rows[rows.length - 1];
-  const lastCell = lastRow.querySelector("td");
-  
-  if (lastCell) {
-    lastCell.setAttribute("colspan", colspanValue);
-  }
-}
+
 
 
   
