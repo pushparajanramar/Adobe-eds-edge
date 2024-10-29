@@ -18,14 +18,19 @@ function decorateTable(container, outputContainer) {
     }
 
     const table = document.createElement('table');
-    parseDivTable(container, table);
+    const thead = document.createElement('thead'); // Create thead
+    const tbody = document.createElement('tbody'); // Create tbody
+    table.appendChild(thead);
+    table.appendChild(tbody);
+
+    parseDivTable(container, thead, tbody);
     outputContainer.appendChild(table);
 }
 
 // Recursive function to parse div tables and create rows and cells
-function parseDivTable(divTable, parentTable) {
+function parseDivTable(divTable, thead, tbody) {
     const rows = Array.from(divTable.children);
-    let currentRow = document.createElement('tr');
+    let currentRow;
 
     rows.forEach((div, index) => {
         const content = div.innerText.trim();
@@ -37,20 +42,33 @@ function parseDivTable(divTable, parentTable) {
         // Determine if it's a header or data cell
         const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
 
-        // Set text content if there's no nested table
+        // Set text content
         cell.innerText = textContent;
 
         // Apply colspan and rowspan if specified
         if (properties['data-colspan']) cell.colSpan = properties['data-colspan'];
         if (properties['data-rowspan']) cell.rowSpan = properties['data-rowspan'];
 
-        // Append the cell to the current row
-        currentRow.appendChild(cell);
+        // Create new row for the header
+        if (properties['data-type'] === 'header') {
+            if (!currentRow) currentRow = document.createElement('tr');
+            currentRow.appendChild(cell);
 
-        // End the row if specified or if it's the last element
-        if (properties['data-end'] === 'row' || index === rows.length - 1) {
-            parentTable.appendChild(currentRow);
-            currentRow = document.createElement('tr'); // Reset for a new row
+            // Append the header row to the thead
+            if (index === rows.length - 1 || properties['data-end'] === 'row') {
+                thead.appendChild(currentRow);
+                currentRow = null; // Reset for the next header row
+            }
+        } else {
+            // Create a new row for the body
+            if (!currentRow) currentRow = document.createElement('tr');
+            currentRow.appendChild(cell);
+
+            // Append the body row to the tbody
+            if (index === rows.length - 1 || properties['data-end'] === 'row') {
+                tbody.appendChild(currentRow);
+                currentRow = null; // Reset for the next body row
+            }
         }
     });
 }
@@ -58,7 +76,7 @@ function parseDivTable(divTable, parentTable) {
 // Main export function
 export default async function decorate(block) {
     const outputContainer = document.createElement("div"); // Create a container for the table
-    outputContainer.className = "table-container";
+    outputContainer.className = "table-container"; // Add your desired class name here
     decorateTable(block, outputContainer);
 
     // Clear the original block content and append the new table
