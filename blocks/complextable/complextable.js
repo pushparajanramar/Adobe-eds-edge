@@ -53,7 +53,7 @@ export default async function decorate(block) {
     table.append(tbody);
 
     parseDivTable(block, thead); // Pass block to parseDivTable for header processing
-    parseDivTable(block, tbody); // Process body separately if needed
+   
 
 
     block.innerHTML = ''; // Clear the original content
