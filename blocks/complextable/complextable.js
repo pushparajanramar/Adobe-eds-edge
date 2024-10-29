@@ -78,12 +78,14 @@ export default async function decorate(block) {
       });
       // Create a new div element
       const custumID = document.createElement('div');
-      custumID.id = 'newDivId'; // replace 'newDivId' with your desired ID
-      const wrapper = document.querySelector('.complextable-wrapper');
-      // Append the new div after the wrapper
-      wrapper.insertAdjacentElement('afterend', custumID);
-      const outputContainer = document.getElementById('newDivId');
+      custumID.id = 'simple-table'; // replace 'newDivId' with your desired ID
+      
+      const container = document.getElementById('custumID');
+      const outputContainer = document.getElementById('simple-output'); //for output 
       outputContainer.innerHTML = ''; // Clear previous output
+
+
+ 
 
       decorateTable(newDiv, outputContainer);
 }
