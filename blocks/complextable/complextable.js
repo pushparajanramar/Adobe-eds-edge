@@ -63,26 +63,21 @@ function parseDivTable(divTable, parentTable) {
 export default async function decorate(block) {
   console.log("(block) is working");
   
-  const container = document.querySelector(".complextable");
-  if (!container) {
-    console.error("Container '.complextable' not found.");
-    return;
-  }
-
-  const tableDivs = container.querySelectorAll("div");
-  const newDiv = document.createElement('div');
-
-  tableDivs.forEach(div => {
-    const clonedDiv = div.cloneNode(true); // Clone instead of moving
-    newDiv.appendChild(clonedDiv);
-  });
-
-  const outputContainer = container;
-  if (!outputContainer) {
-    console.error("Output container '#Div1' not found.");
-    return;
-  }
-  
-  outputContainer.innerHTML = ''; // Clear previous output
+  function complexTable() {
+      const tableDivs = document.querySelectorAll(".complextable div");
+      var newDiv = document.createElement('div');
+      [...tableDivs].forEach((div, index) => {
+        newDiv.appendChild(div);
+      });
+      // Create a new div element
+      const custumID = document.createElement('div');
+      custumID.id = 'newDivId'; // replace 'newDivId' with your desired ID
+      const wrapper = document.querySelector('.complextable-wrapper');
+      // Append the new div after the wrapper
+      wrapper.insertAdjacentElement('afterend', custumID);
+      const outputContainer = document.getElementById('newDivId');
+      outputContainer.innerHTML = ''; // Clear previous output
+      decorateTable(newDiv, outputContainer);
+    }
   decorateTable(newDiv, outputContainer);
 }
