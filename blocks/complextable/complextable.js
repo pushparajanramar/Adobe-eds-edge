@@ -21,45 +21,49 @@ function decorateTable(container, outputContainer) {
 }
 
  function parseDivTable(divTable, parentTable) {
-      const rows = Array.from(divTable.children);
-      let currentRow = document.createElement('tr');
+    const rows = Array.from(divTable.children);
+    let currentRow = document.createElement('tr');
 
-      rows.forEach((div, index) => {
-        const content = div.innerText.trim();
-        if (content === '') return; // Skip empty divs
+    rows.forEach((rowDiv) => {
+        const cells = Array.from(rowDiv.children);
+        let isEndRow = false; // Flag to track if we've reached an end row marker
 
-        const properties = parseProperties(content);
-        const textContent = content.replace(/\$.*?\$/g, '').trim(); // Remove $...$ tags from content
+        cells.forEach((cellDiv) => {
+            const content = cellDiv.innerHTML.trim();
+            if (content === '') return; // Skip empty divs
 
-        // Determine if it's a header or data cell
-        const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
+            const properties = parseProperties(content);
+            const cellContent = content.replace(/\$.*?\$/g, '').trim(); // Remove $...$ tags from content
 
-        // Check for nested table and process it recursively if present
-        const nestedTableDiv = div.querySelector('.table-type-container');
-        if (nestedTableDiv) {
-          const nestedTable = document.createElement('table');
-          parseDivTable(nestedTableDiv, nestedTable); // Recursive call for nested table
-          cell.appendChild(nestedTable);
-        } else {
-          // Set text content if there's no nested table
-          cell.innerText = textContent;
+            // Create a cell (either <th> for headers or <td> for regular cells)
+            const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
+            cell.innerHTML = cellContent; // Set innerHTML to retain any HTML content
+
+            // Apply colspan and rowspan if specified
+            if (properties['data-colspan']) cell.colSpan = properties['data-colspan'];
+            if (properties['data-rowspan']) cell.rowSpan = properties['data-rowspan'];
+
+            // Append the cell to the current row
+            currentRow.appendChild(cell);
+
+            // Check for end row marker
+            if (properties['data-end'] === 'row') {
+                isEndRow = true; // Mark that we've reached the end of this row
+            }
+        });
+
+        // If we reached the end of a row, append the current row to the table and create a new row
+        if (isEndRow) {
+            parentTable.appendChild(currentRow);
+            currentRow = document.createElement('tr'); // Reset for the next row
         }
+    });
 
-        // Apply colspan and rowspan if specified
-        if (properties['data-colspan']) cell.colSpan = properties['data-colspan'];
-        if (properties['data-rowspan']) cell.rowSpan = properties['data-rowspan'];
-
-        // Append the cell to the current row
-        currentRow.appendChild(cell);
-
-        // End the row if specified or if it's the last element
-        if (properties['data-end'] === 'row' || index === rows.length - 1) {
-          parentTable.appendChild(currentRow);
-          currentRow = document.createElement('tr'); // Reset for a new row
-        }
-      });
+    // If there are any remaining cells in currentRow, append it to the parentTable
+    if (currentRow.children.length > 0) {
+        parentTable.appendChild(currentRow);
     }
-
+}
 export default async function decorate(block) {
   console.log("(block) is working");
       const tableDivs = document.querySelectorAll(".complextable div");
