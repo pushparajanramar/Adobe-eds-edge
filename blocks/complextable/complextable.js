@@ -1,11 +1,3 @@
-document.addEventListener("DOMContentLoaded", (event) => {
-  console.log("DOM fully loaded and parsed");
-
-      
-});
-
-
-
 function buildCell(rowIndex) {
       const cell = rowIndex
         ? document.createElement("td")
