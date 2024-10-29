@@ -80,7 +80,7 @@ function complexTable() {
       if (!rowIndex) cell.setAttribute("scope", "col");
       return cell;
     }
-    function decorate(block) {
+  export default async function decorate(block) {
       console.log('block', block)
       const table = document.createElement("table");
       const thead = document.createElement("thead");
@@ -101,6 +101,6 @@ function complexTable() {
       });
       block.innerHTML = "";
       block.append(table);
-
+  complexTable()
     }
 
