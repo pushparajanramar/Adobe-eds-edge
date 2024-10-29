@@ -7,6 +7,7 @@ function buildCell(rowIndex, isHeader, colspan) {
 
 export default async function decorate(block) {
   const ctable = document.createElement("table");
+   console.log('tables',ctable)
   const cthead = document.createElement("thead");
   const ctbody = document.createElement("tbody");
 
