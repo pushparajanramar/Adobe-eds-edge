@@ -74,6 +74,6 @@ export default async function decorate(block) {
       // Append the new div after the wrapper
       wrapper.insertAdjacentElement('afterend', custumID);
       const outputContainer = document.getElementById('newDivId');
-      
+      console.log("newDiv" , newDiv.innerHTML);
      decorateTable(newDiv, outputContainer);
 }
