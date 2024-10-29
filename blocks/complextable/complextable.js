@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', () => {
+
 function parseProperties(content) {
   const properties = {};
   const regex = /\$(.*?)\$/g;
@@ -103,3 +105,5 @@ export default async function decorate(block) {
   block.append(table);
   complexTable();
 }
+  // Your complexTable function call or any other initialization code here
+});
