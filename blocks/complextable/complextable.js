@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", (event) => {
   console.log("DOM fully loaded and parsed");
-var g = document.createElement('div');
-         g.setAttribute("id", "Div1");
+
       
 });
 
@@ -79,14 +78,15 @@ function parseDivTable(divTable, parentTable) {
 
 export default async function decorate(block) {
  
- console.log("export default async function decorate(block) is working");
+ console.log("(block) is working");
  const tableDivs = document.querySelectorAll(".complextable div");
       var newDiv = document.createElement('div');
       [...tableDivs].forEach((div, index) => {
         newDiv.appendChild(div);
       });
       // Create a new div element
-     
+       var g = document.createElement('div');
+         g.setAttribute("id", "Div1");
       const container = document.getElementById(g);
       const outputContainer = document.getElementById('Div1'); //for output 
       outputContainer.innerHTML = ''; // Clear previous output
