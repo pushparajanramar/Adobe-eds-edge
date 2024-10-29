@@ -10,6 +10,46 @@ function parseProperties(content) {
     return properties;
 }
 
+function parseDivTable(divTable, parentTable) {
+    const rows = Array.from(divTable.children);
+    let currentRow = document.createElement('tr');
+
+    rows.forEach((div, index) => {
+        const content = div.innerText.trim();
+        if (content === '') return; // Skip empty divs
+
+        const properties = parseProperties(content);
+        const textContent = content.replace(/\$.*?\$/g, '').trim(); // Remove $...$ tags from content
+
+        // Determine if it's a header or data cell based on parsed properties
+        const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
+
+        // Check for nested table and process it recursively if present
+        const nestedTableDiv = div.querySelector('.table-type-container');
+        if (nestedTableDiv) {
+            const nestedTable = document.createElement('table');
+            parseDivTable(nestedTableDiv, nestedTable); // Recursive call for nested table
+            cell.appendChild(nestedTable);
+        } else {
+            // Set text content if there's no nested table
+            cell.innerText = textContent;
+        }
+
+        // Apply colspan and rowspan if specified
+        if (properties['data-colspan']) cell.colSpan = properties['data-colspan'];
+        if (properties['data-rowspan']) cell.rowSpan = properties['data-rowspan'];
+
+        // Append the cell to the current row
+        currentRow.appendChild(cell);
+
+        // End the row if specified or if it's the last element
+        if (properties['data-end'] === 'row' || index === rows.length - 1) {
+            parentTable.appendChild(currentRow);
+            currentRow = document.createElement('tr'); // Reset for a new row
+        }
+    });
+}
+
 export default async function decorate(block) {
     const table = document.createElement('table');
     const thead = document.createElement('thead');
@@ -18,46 +58,8 @@ export default async function decorate(block) {
     table.append(thead);
     table.append(tbody);
 
-    const rows = Array.from(block.children);
-
-    rows.forEach((div, i) => {
-        const content = div.innerText.trim();
-        if (content === '') return; // Skip empty divs
-
-        const properties = parseProperties(content);
-        const textContent = content.replace(/\$.*?\$/g, '').trim(); // Remove $...$ tags from content
-
-        // Create a new row if it's the first or if it ends a row
-        let row;
-        if (i === 0 || properties['data-end'] === 'row') {
-            row = document.createElement('tr');
-            if (properties['data-type'] === 'header') {
-                thead.append(row);
-            } else {
-                tbody.append(row);
-            }
-        }
-
-        // Determine if it's a header or data cell
-        const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
-
-        // Set text content for the cell
-        cell.innerText = textContent;
-
-        // Apply colspan and rowspan if specified
-        if (properties['data-colspan']) cell.colSpan = properties['data-colspan'];
-        if (properties['data-rowspan']) cell.rowSpan = properties['data-rowspan'];
-
-        // Append the cell to the current row
-        row.appendChild(cell);
-
-        // If the row needs to end, append it to the appropriate section
-        if (properties['data-end'] === 'row' || i === rows.length - 1) {
-            if (row) {
-                (properties['data-type'] === 'header' ? thead : tbody).appendChild(row);
-            }
-        }
-    });
+    parseDivTable(block, thead); // Pass block to parseDivTable for header processing
+    parseDivTable(block, tbody); // Process body separately if needed
 
     block.innerHTML = '';
     block.append(table);
