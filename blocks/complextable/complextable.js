@@ -1,15 +1,28 @@
+// Helper function to extract properties from content enclosed in $...$
 function parseProperties(content) {
     const properties = {};
-    const matches = content.match(/\$(.*?)\$/g);
-    if (matches) {
-        matches.forEach(match => {
-            const [key, value] = match.replace(/\$/g, '').split('=');
-            properties[key.trim()] = value ? value.trim() : true; // Handle true/false values
-        });
+    const regex = /\$(.*?)\$/g;
+    let match;
+    while ((match = regex.exec(content)) !== null) {
+        const [key, value] = match[1].split('=');
+        properties[key.trim()] = value ? value.trim() : true;
     }
     return properties;
 }
 
+// Main function to convert div-based tables to HTML tables with <tr>, <td>, and <th>
+function decorateTable(container, outputContainer) {
+    if (!container) {
+        console.error("Container not found:", container);
+        return;
+    }
+
+    const table = document.createElement('table');
+    parseDivTable(container, table);
+    outputContainer.appendChild(table);
+}
+
+// Recursive function to parse div tables and create rows and cells
 function parseDivTable(divTable, parentTable) {
     const rows = Array.from(divTable.children);
     let currentRow = document.createElement('tr');
@@ -21,22 +34,20 @@ function parseDivTable(divTable, parentTable) {
         const properties = parseProperties(content);
         const textContent = content.replace(/\$.*?\$/g, '').trim(); // Remove $...$ tags from content
 
+        // Determine if it's a header or data cell
         const cell = properties['data-type'] === 'header' ? document.createElement('th') : document.createElement('td');
 
-        const nestedTableDiv = div.querySelector('.table-type-container');
-        if (nestedTableDiv) {
-            const nestedTable = document.createElement('table');
-            parseDivTable(nestedTableDiv, nestedTable); // Recursive call for nested table
-            cell.appendChild(nestedTable);
-        } else {
-            cell.innerText = textContent;
-        }
+        // Set text content if there's no nested table
+        cell.innerText = textContent;
 
+        // Apply colspan and rowspan if specified
         if (properties['data-colspan']) cell.colSpan = properties['data-colspan'];
         if (properties['data-rowspan']) cell.rowSpan = properties['data-rowspan'];
 
+        // Append the cell to the current row
         currentRow.appendChild(cell);
 
+        // End the row if specified or if it's the last element
         if (properties['data-end'] === 'row' || index === rows.length - 1) {
             parentTable.appendChild(currentRow);
             currentRow = document.createElement('tr'); // Reset for a new row
@@ -44,28 +55,12 @@ function parseDivTable(divTable, parentTable) {
     });
 }
 
+// Main export function
 export default async function decorate(block) {
-    const table = document.createElement('table');
-    const thead = document.createElement('thead');
-    const tbody = document.createElement('tbody');
+    const outputContainer = document.createElement("div"); // Create a container for the table
+    decorateTable(block, outputContainer);
 
-    table.append(thead);
-    table.append(tbody);
-
-    parseDivTable(block, thead); // Pass block to parseDivTable for header processing
-    parseDivTable(block, tbody); // Process body separately if needed
-document.addEventListener('DOMContentLoaded', () => {
-    const tableCells = document.querySelectorAll('.complextable th, .complextable td');
-
-    tableCells.forEach(cell => {
-        // Replace <br> with <div> to ensure each item is on a new line
-        cell.innerHTML = cell.innerHTML.replace(/<br\s*\/?>/g, '</div><div>');
-        
-        // Wrap the content in a <div> to format it correctly
-        cell.innerHTML = `<div>${cell.innerHTML}</div>`;
-    });
-});
-
-    block.innerHTML = ''; // Clear the original content
-    block.append(table); // Append the constructed table
+    // Clear the original block content and append the new table
+    block.innerHTML = "";
+    block.appendChild(outputContainer);
 }
