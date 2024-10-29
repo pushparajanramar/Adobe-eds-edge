@@ -68,6 +68,12 @@ function parseDivTable(divTable, parentTable) {
 }
 export default async function decorate(block) {
   console.log("(block) is working");
+   const wrapper = document.querySelector('.complextable-wrapper');
+  if (!wrapper) {
+    console.error('Wrapper element not found!');
+    return; // Stop further execution if wrapper is not found
+  }
+
   const tableDivs = document.querySelectorAll(".complextable div");
   var newDiv = document.createElement('div');
 
@@ -78,12 +84,7 @@ export default async function decorate(block) {
     }
   });
 
-  const wrapper = document.querySelector('.complextable-wrapper');
-  if (!wrapper) {
-    console.error('Wrapper element not found!');
-    return; // Stop further execution if wrapper is not found
-  }
-
+ 
   const customID = document.createElement('div');
   customID.id = 'newDivId'; // Set a unique ID for the output div
   wrapper.insertAdjacentElement('afterend', customID);
