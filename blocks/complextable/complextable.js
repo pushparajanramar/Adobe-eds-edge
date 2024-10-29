@@ -73,8 +73,34 @@ export default async function decorate(block) {
       [...tableDivs].forEach((div, index) => {
         newDiv.appendChild(div);
       });
-      // Create a new div element
-     
-      console.log("newDiv" , newDiv.innerHTML);
-     decorateTable(newDiv, outputContainer);
+      function complexTable() {
+  const tableDivs = document.querySelectorAll(".complextable div");
+  var newDiv = document.createElement('div');
+
+  // Filter out empty divs before appending
+  [...tableDivs].forEach((div) => {
+      if (div.innerHTML.trim() !== "") { // Check if div is not empty
+          newDiv.appendChild(div.cloneNode(true)); // Clone and append the non-empty divs
+      }
+  });
+
+  const wrapper = document.querySelector('.complextable-wrapper');
+  if (!wrapper) {
+      console.error('Wrapper element not found!');
+      return; // Stop further execution if wrapper is not found
+  }
+
+  const customID = document.createElement('div');
+  customID.id = 'newDivId'; // Set a unique ID for the output div
+  wrapper.insertAdjacentElement('afterend', customID);
+
+  const outputContainer = document.getElementById('newDivId');
+  outputContainer.innerHTML = ''; // Clear any previous output
+
+  // Log for debugging
+  console.log("New Div Content:", newDiv.innerHTML); // Log to see what's being processed
+
+  // Call the decorateTable function to create the table
+  decorateTable(newDiv, outputContainer);
+
 }
