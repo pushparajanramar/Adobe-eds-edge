@@ -1,1 +1,75 @@
+.complextable {
+  width: 100%;
+  overflow-x: auto;
+  margin:10px 0;
+}
 
+.complextable table {
+  width: 100%;
+  max-width: 100%;
+  border:1px solid #dadada;
+  border-collapse: collapse;
+  font-size: var(--body-font-size-xs);
+}
+
+.complextable table tr th {
+  background-color: #C6D9F1;
+}
+
+@media (width >= 600px) {
+  .complextable table {
+    font-size: var(--body-font-size-s);
+  }
+}
+
+@media (width >= 900px) {
+  .complextable table {
+    font-size: var(--body-font-size-m);
+  }
+}
+
+.complextable table thead tr {
+  border-top: 1px solid #dadada;
+  border-bottom: 1px solid #dadada;
+}
+
+.complextable table tbody tr {
+  border-bottom: 1px solid #dadada;
+}
+
+.complextable table th {
+  font-weight: 700;
+  border: 1px solid #dadada;
+}
+
+.complextable table th,
+.complextable table td {
+  padding: 0.5em;
+  text-align: left;
+  border: 1px solid #dadada;
+}
+
+.complextable table th p,
+.complextable table td p {
+  margin: 0;
+}
+
+.complextable table td p + p {
+  margin-top: 0.25em;
+}
+
+/* no header variant */
+.table.no-header table tbody tr {
+  border-top: 1px solid #dadada;
+}
+
+/* striped variant */
+.complextable.striped tbody tr:nth-child(odd) {
+  background-color: var(--light-color);
+}
+
+/* bordered variant */
+.complextable.bordered table th,
+.complextable.bordered table td {
+  border: 1px solid #dadada;
+}
