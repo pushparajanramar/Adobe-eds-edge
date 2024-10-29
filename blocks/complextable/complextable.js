@@ -74,12 +74,7 @@ export default async function decorate(block) {
         newDiv.appendChild(div);
       });
       // Create a new div element
-      const custumID = document.createElement('div');
-      custumID.id = 'newDivId'; // replace 'newDivId' with your desired ID
-      const wrapper = document.querySelector('.complextable-wrapper');
-      // Append the new div after the wrapper
-      wrapper.insertAdjacentElement('afterend', custumID);
-      const outputContainer = document.getElementById('newDivId');
+     
       console.log("newDiv" , newDiv.innerHTML);
      decorateTable(newDiv, outputContainer);
 }
