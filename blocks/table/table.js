@@ -27,22 +27,27 @@ function createTableFromDivWrapper(divWrapper) {
 }
  
 // Function to create a new <tr> element for each row div
-function createTableCell(cellDiv) {
-    console.log("Entering createTableCell");
-    const isHeader = checkIfHeader(cellDiv);
-    const cell = document.createElement(isHeader ? 'th' : 'td');
-    setCellAttributes(cell, cellDiv);
-    var ps = cellDiv.getElementsByTagName('p');
-    if (ps?.[0]) {
-        cell.innerText = '';
-        [...cellDiv].forEach((ptag, index) => {
-              cell.innerText += cleanCellText(ptag.textContent);
-        });
-    } else {
-        cell.innerText = cleanCellText(cellDiv.textContent);
-    }
-    console.log("Exiting createTableCell");
-    return cell;
+function createTableRow(rowDiv) {
+    // console.log("Entering createTableRow");
+    // const tr = document.createElement('tr');
+    // const cells = rowDiv.querySelectorAll('div');
+ 
+    // cells.forEach((cellDiv) => {
+    //     const cell = createTableCell(cellDiv);
+    //     tr.appendChild(cell);
+    // });
+ 
+    // console.log("Exiting createTableRow");
+    // return tr;
+    console.log("Entering createTableRow");
+    const tr = document.createElement('tr');
+    const cells = rowDiv.querySelectorAll('div');
+    cells.forEach((cellDiv) => {
+        const cell = createTableCell(cellDiv);
+        tr.appendChild(cell);
+    });
+    console.log("Exiting createTableRow");
+    return tr;
 }
  
 // Function to create a table cell, either <th> or <td>, based on data-type
