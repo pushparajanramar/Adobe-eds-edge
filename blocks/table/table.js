@@ -80,11 +80,25 @@ function setCellAttributes(cell, cellDiv) {
 // Function to retrieve colspan from cell content if specified
 function getColspan(cellDiv) {
     console.log("Entering getColspan");
-    const colspanMatch = cellDiv.querySelector('p').textContent.match(/\$data-colspan=(\d+)\$/);
-    const result = colspanMatch ? colspanMatch[1] : null;
+
+    if (!(cellDiv instanceof HTMLElement)) {
+        console.error("Invalid cellDiv provided");
+        return null;
+    }
+
+    const pElement = cellDiv.querySelector('p');
+    if (!pElement) {
+        console.warn("No <p> element found in cellDiv");
+        return null;
+    }
+
+    const colspanMatch = pElement.textContent.match(/\$data-colspan=(\d+)\$/);
+    const result = colspanMatch ? parseInt(colspanMatch[1], 10) : null;
+
     console.log("Exiting getColspan with result:", result);
     return result;
 }
+
 
 // Helper function to clean up cell text by removing special markers
 function cleanCellText(text) {
