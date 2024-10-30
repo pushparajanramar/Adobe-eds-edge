@@ -48,11 +48,17 @@ function createTableCell(cellDiv) {
     const cell = document.createElement(isHeader ? 'th' : 'td');
 
     setCellAttributes(cell, cellDiv);
-    cell.innerText = cleanCellText(cellDiv.querySelector('p').textContent);
+
+    // Attempt to find the <p> element and get its text content
+    const paragraph = cellDiv.querySelector('p');
+    const cellText = paragraph ? cleanCellText(paragraph.textContent) : '';
+
+    cell.innerText = cellText;
 
     console.log("Exiting createTableCell");
     return cell;
 }
+
 
 // Helper function to check if a cell is a header based on content
 function checkIfHeader(cellDiv) {
