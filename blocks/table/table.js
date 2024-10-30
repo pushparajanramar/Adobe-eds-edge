@@ -48,7 +48,13 @@ function createTableCell(cellDiv) {
     const cell = document.createElement(isHeader ? 'th' : 'td');
 
     setCellAttributes(cell, cellDiv);
-    cell.innerText = cleanCellText(cellDiv.querySelector('p').textContent);
+    const pElement = cellDiv.querySelector('p');
+    if (pElement) {
+        cell.innerText = cleanCellText(pElement.textContent);
+    } else {
+        // Handle the case where <p> doesn't exist
+        cell.innerText = ''; // Or some default value, or throw an error
+    }
 
     console.log("Exiting createTableCell");
     return cell;
