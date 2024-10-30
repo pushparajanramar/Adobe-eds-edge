@@ -71,15 +71,27 @@ function checkIfHeader(cellDiv) {
 
 // Function to set alignment, vertical alignment, and colspan attributes on a cell
 function setCellAttributes(cell, cellDiv) {
+    // console.log("Entering setCellAttributes");
+    // const align = cellDiv.getAttribute('data-align');
+    // const valign = cellDiv.getAttribute('data-valign');
+    // const colspan = getColspan(cellDiv);
+
+    // if (align) cell.style.textAlign = align;
+    // if (valign) cell.style.verticalAlign = valign;
+    // if (colspan) cell.setAttribute('colspan', colspan);
+
+    // console.log("Exiting setCellAttributes");
     console.log("Entering setCellAttributes");
     const align = cellDiv.getAttribute('data-align');
     const valign = cellDiv.getAttribute('data-valign');
-    const colspan = getColspan(cellDiv);
-
+    var ps = cellDiv.getElementsByTagName('p');
+    if (ps?.[0]) {
+        const colspan = getColspan(cellDiv);
+        if (colspan) cell.setAttribute('colspan', colspan);
+    }
+ 
     if (align) cell.style.textAlign = align;
     if (valign) cell.style.verticalAlign = valign;
-    if (colspan) cell.setAttribute('colspan', colspan);
-
     console.log("Exiting setCellAttributes");
 }
 
