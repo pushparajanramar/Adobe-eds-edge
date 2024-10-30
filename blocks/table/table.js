@@ -57,7 +57,8 @@ function createTableCell(cellDiv) {
 // Helper function to check if a cell is a header based on content
 function checkIfHeader(cellDiv) {
     console.log("Entering checkIfHeader");
-    const result = cellDiv.querySelector('p').textContent.includes('$data-type=header$');
+    const pElement = cellDiv.querySelector('p');
+    const result = pElement && pElement.textContent.includes('$data-type=header$');
     console.log("Exiting checkIfHeader with result:", result);
     return result;
 }
