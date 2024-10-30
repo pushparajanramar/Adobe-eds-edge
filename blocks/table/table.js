@@ -48,13 +48,7 @@ function createTableCell(cellDiv) {
     const cell = document.createElement(isHeader ? 'th' : 'td');
 
     setCellAttributes(cell, cellDiv);
-    const pElement = cellDiv.querySelector('p');
-    if (pElement) {
-        cell.innerText = cleanCellText(pElement.textContent);
-    } else {
-        // Handle the case where <p> doesn't exist
-        cell.innerText = ''; // Or some default value, or throw an error
-    }
+    cell.innerText = cleanCellText(cellDiv.querySelector('p').textContent);
 
     console.log("Exiting createTableCell");
     return cell;
@@ -63,11 +57,10 @@ function createTableCell(cellDiv) {
 // Helper function to check if a cell is a header based on content
 function checkIfHeader(cellDiv) {
     console.log("Entering checkIfHeader");
-    const pElement = cellDiv.querySelector('p');
-    const result = pElement && pElement.textContent.includes('$data-type=header$');
+    const result = cellDiv.querySelector('p').textContent.includes('$data-type=header$');
     console.log("Exiting checkIfHeader with result:", result);
     return result;
-}    
+}
 
 // Function to set alignment, vertical alignment, and colspan attributes on a cell
 function setCellAttributes(cell, cellDiv) {
@@ -84,30 +77,13 @@ function setCellAttributes(cell, cellDiv) {
 }
 
 // Function to retrieve colspan from cell content if specified
-// function getColspan(cellDiv) {
-//     console.log("Entering getColspan");
-//     const colspanMatch = cellDiv.querySelector('p').textContent.match(/\$data-colspan=(\d+)\$/);
-//     const result = colspanMatch ? colspanMatch[1] : null;
-//     console.log("Exiting getColspan with result:", result);
-//     return result;
-// }
-
 function getColspan(cellDiv) {
     console.log("Entering getColspan");
-    const pElement = cellDiv.querySelector('p');
-    
-    // Check if the <p> element exists
-    if (!pElement) {
-        console.log("Exiting getColspan with no <p> element found");
-        return null; // Return null if <p> is not found
-    }
-
-    const colspanMatch = pElement.textContent.match(/\$data-colspan=(\d+)\$/);
+    const colspanMatch = cellDiv.querySelector('p').textContent.match(/\$data-colspan=(\d+)\$/);
     const result = colspanMatch ? colspanMatch[1] : null;
     console.log("Exiting getColspan with result:", result);
     return result;
 }
-
 
 // Helper function to clean up cell text by removing special markers
 function cleanCellText(text) {
