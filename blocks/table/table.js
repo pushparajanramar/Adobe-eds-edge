@@ -28,15 +28,29 @@ function createTableFromDivWrapper(divWrapper) {
 
 // Function to create a new <tr> element for each row div
 function createTableRow(rowDiv) {
+    // console.log("Entering createTableRow");
+    // const tr = document.createElement('tr');
+    // const cells = rowDiv.querySelectorAll('div');
+
+    // cells.forEach((cellDiv) => {
+    //     const cell = createTableCell(cellDiv);
+    //     tr.appendChild(cell);
+    // });
+
+    // console.log("Exiting createTableRow");
+    // return tr;
     console.log("Entering createTableRow");
     const tr = document.createElement('tr');
     const cells = rowDiv.querySelectorAll('div');
-
+ 
     cells.forEach((cellDiv) => {
-        const cell = createTableCell(cellDiv);
-        tr.appendChild(cell);
+        var ps = cellDiv.getElementsByTagName('p');
+        if (ps?.[0]) {
+            const cell = createTableCell(cellDiv);
+            tr.appendChild(cell);
+        }
     });
-
+ 
     console.log("Exiting createTableRow");
     return tr;
 }
