@@ -1,4 +1,3 @@
-
 // Main function to convert div-based tables to HTML tables with <tr>, <td>, and <th>
 export default async function decorate(block) {
     console.log("Entering decorate function" + block);
