@@ -2,12 +2,8 @@
 export default async function decorate(block) {
     console.log("Entering decorate function" + block);
     const table = createTableFromDivWrapper(block);
-    // Clear any existing tables within the wrapper
-    block.innerHTML = ''; // Remove all previous child elements in block
+    block.innerHTML = ''; // Clear all previous child elements in block
     block.appendChild(table);
-
-    const wrappers = block.querySelectorAll('div'); // Select all div elements
-
     console.log("Exiting decorate function");
 }
 
@@ -16,9 +12,27 @@ function createTableFromDivWrapper(divWrapper) {
     console.log("Entering createTableFromDivWrapper");
     const table = document.createElement('table');
     const rows = divWrapper.querySelectorAll('.table.block > div');
+    const maxColumns = calculateMaxColumns(rows);
+    let isHeaderSection = true;
+    let hasBoundaryRow = false;
+
+    // Check if there's a boundary row with "***" or "$data-end=row$" marker to stop treating rows as headers
+    rows.forEach((rowDiv) => {
+        const cellTexts = Array.from(rowDiv.querySelectorAll('div')).map(cell => cell.innerText.trim());
+        if (cellTexts.includes("***") || cellTexts.some(text => /\$data-end=row\$/.test(text))) {
+            hasBoundaryRow = true;
+        }
+    });
 
     rows.forEach((rowDiv) => {
-        const tr = createTableRow(rowDiv);
+        const cellTexts = Array.from(rowDiv.querySelectorAll('div')).map(cell => cell.innerText.trim());
+
+        if (hasBoundaryRow && (cellTexts.includes("***") || cellTexts.some(text => /\$data-end=row\$/.test(text)))) {
+            isHeaderSection = false; // Stop treating rows as headers after the "***" or "$data-end=row$" marker row
+            return; // Skip the "***" or "$data-end=row$" row from rendering
+        }
+
+        const tr = createTableRow(rowDiv, isHeaderSection, maxColumns);
         table.appendChild(tr);
     });
 
@@ -27,13 +41,13 @@ function createTableFromDivWrapper(divWrapper) {
 }
 
 // Function to create a new <tr> element for each row div
-function createTableRow(rowDiv) {
+function createTableRow(rowDiv, isHeaderSection, maxColumns) {
     console.log("Entering createTableRow");
     const tr = document.createElement('tr');
     const cells = rowDiv.querySelectorAll('div');
 
     cells.forEach((cellDiv) => {
-        const cell = createTableCell(cellDiv);
+        const cell = createTableCell(cellDiv, isHeaderSection, maxColumns);
         tr.appendChild(cell);
     });
 
@@ -41,41 +55,30 @@ function createTableRow(rowDiv) {
     return tr;
 }
 
-// Function to create a table cell, either <th> or <td>, based on data-type
-// Updated function to create a table cell, handling nested HTML
-// Function to create a table cell, ensuring header cells are generated as <th>
-// Function to create a table cell, ensuring header cells are generated as <th>
-function createTableCell(cellDiv) {
+// Function to create a table cell, ensuring header cells are generated as <th> when in header section
+function createTableCell(cellDiv, isHeaderSection, maxColumns) {
     console.log("Entering createTableCell with cellDiv:", cellDiv);
-    const isHeader = checkIfHeader(cellDiv);
+    const cellContent = cellDiv.innerText.trim();
+    const isFullWidth = cellContent === "---"; // Check if cell should span entire row
+    const isExplicitHeader = cellContent.includes('$data-type=header$'); // Check for $data-type=header$ marker
+    const isHeader = isHeaderSection || isExplicitHeader; // Treat as header if in header section or marked explicitly
+
     const cell = document.createElement(isHeader ? 'th' : 'td');  // Create <th> or <td> based on header status
 
-    setCellAttributes(cell, cellDiv);
+    if (isFullWidth) {
+        cell.setAttribute('colspan', maxColumns); // Set colspan to maximum columns if marked with ---
+        cell.innerHTML = ""; // Clear the content as it's a full-width spacer row
+    } else {
+        setCellAttributes(cell, cellDiv);
+        cell.innerHTML = cleanCellText(cellDiv.innerHTML);
 
-    // Use innerHTML to preserve nested elements and cleaned-up content
-    cell.innerHTML = cleanCellText(cellDiv.innerHTML);
+        // Check for nested tables within this cell
+        const nestedTables = cell.querySelectorAll('table');
+        nestedTables.forEach(nestedTable => applyNestedTableHeaders(nestedTable));
+    }
 
     console.log("Exiting createTableCell with cell type:", isHeader ? 'th' : 'td', "and content:", cell.innerHTML);
     return cell;
-}
-
-// Helper function to check if a cell is a header based on content
-// Updated function to check if a cell is a header based on content, handling whitespaces and variations
-// Function to check if any <p> tag in a cell contains the header marker
-function checkIfHeader(cellDiv) {
-    console.log("Entering checkIfHeader with cellDiv:", cellDiv);
-    const paragraphs = cellDiv.querySelectorAll('p');
-    let isHeader = false;
-
-    // Loop through all <p> tags to check for the header marker
-    paragraphs.forEach((p) => {
-        if (/\$data-type=header\$/i.test(p.innerHTML)) {
-            isHeader = true;
-        }
-    });
-
-    console.log("Exiting checkIfHeader with result:", isHeader);
-    return isHeader;
 }
 
 // Function to set alignment, vertical alignment, and colspan attributes on a cell
@@ -95,16 +98,13 @@ function setCellAttributes(cell, cellDiv) {
 // Function to retrieve colspan from cell content if specified
 function getColspan(cellDiv) {
     console.log("Entering getColspan");
-    const colspanMatch = cellDiv.querySelector('p').textContent.match(/\$data-colspan=(\d+)\$/);
+    const colspanMatch = cellDiv.querySelector('p')?.textContent.match(/\$data-colspan=(\d+)\$/);
     const result = colspanMatch ? colspanMatch[1] : null;
     console.log("Exiting getColspan with result:", result);
     return result;
 }
 
 // Helper function to clean up cell text by removing special markers
-// Updated helper function to clean up cell text by removing special markers, keeping HTML intact
-// Updated helper function to clean up cell text by removing special markers only, leaving other content intact
-// Updated helper function to clean up cell text by removing special markers, leaving other content intact
 function cleanCellText(htmlContent) {
     console.log("Entering cleanCellText with content:", htmlContent);
 
@@ -117,4 +117,37 @@ function cleanCellText(htmlContent) {
 
     console.log("Exiting cleanCellText with result:", result);
     return result;
+}
+
+// Function to calculate the maximum number of columns in the table
+function calculateMaxColumns(rows) {
+    let maxColumns = 0;
+    rows.forEach(row => {
+        const cellCount = row.querySelectorAll('div').length;
+        if (cellCount > maxColumns) {
+            maxColumns = cellCount;
+        }
+    });
+    console.log("Max columns calculated:", maxColumns);
+    return maxColumns;
+}
+
+// Function to apply header row formatting to the first row of a nested table
+function applyNestedTableHeaders(nestedTable) {
+    console.log("Entering applyNestedTableHeaders for a nested table");
+    const firstRow = nestedTable.querySelector('tr');
+
+    if (firstRow) {
+        const cells = firstRow.children;
+        Array.from(cells).forEach(cell => {
+            // Convert <td> to <th> if it’s not already <th>
+            if (cell.tagName.toLowerCase() === 'td') {
+                const th = document.createElement('th');
+                th.innerHTML = cell.innerHTML;
+                firstRow.replaceChild(th, cell);
+            }
+        });
+    }
+
+    console.log("Exiting applyNestedTableHeaders");
 }
