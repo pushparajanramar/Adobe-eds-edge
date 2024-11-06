@@ -12,7 +12,7 @@
   font-size: var(--body-font-size-xs);
 }
 
-.table table tr th {
+.table table thead tr th {
   background-color: #C6D9F1;
 }
 
