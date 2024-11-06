@@ -96,12 +96,29 @@ function setCellAttributes(cell, cellDiv) {
 }
 
 // Function to retrieve colspan from cell content if specified
+// function getColspan(cellDiv) {
+//     console.log("Entering getColspan");
+//     const colspanMatch = cellDiv.querySelector('p')?.textContent.match(/\$data-colspan=(\d+)\$/);
+//     const result = colspanMatch ? colspanMatch[1] : null;
+//     console.log("Exiting getColspan with result:", result);
+//     return result;
+// }
+
+
 function getColspan(cellDiv) {
     console.log("Entering getColspan");
-    const colspanMatch = cellDiv.querySelector('p')?.textContent.match(/\$data-colspan=(\d+)\$/);
-    const result = colspanMatch ? colspanMatch[1] : null;
-    console.log("Exiting getColspan with result:", result);
-    return result;
+    let result = null; // Declare result
+    const colspanMatch = cellDiv.querySelectorAll('p');
+
+    colspanMatch.forEach((p) => {
+        const match = p.innerHTML.match(/\$data-colspan=(\d+)\$/i); // Match and capture the number
+        if (match) {
+            result = match[1]; // Extract the number from the match
+        }
+    });
+
+    console.log("Exiting getColspan", result);
+    return result; // Return result
 }
 
 // Helper function to clean up cell text by removing special markers
