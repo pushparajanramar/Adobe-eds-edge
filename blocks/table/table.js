@@ -1,4 +1,4 @@
-// Main function to convert div-based tables to HTML tables with <tr>, <td>, and <th>
+// Main function to convert div-based tables to HTML tables with <tr>, <td>, <th>
 export default async function decorate(block) {
     console.log("Entering decorate function" + block);
     const table = createTableFromDivWrapper(block);
@@ -24,6 +24,9 @@ function createTableFromDivWrapper(divWrapper) {
         }
     });
 
+    const thead = document.createElement('thead');
+    const tbody = document.createElement('tbody');
+
     rows.forEach((rowDiv) => {
         const cellTexts = Array.from(rowDiv.querySelectorAll('div')).map(cell => cell.innerText.trim());
 
@@ -33,8 +36,18 @@ function createTableFromDivWrapper(divWrapper) {
         }
 
         const tr = createTableRow(rowDiv, isHeaderSection, maxColumns);
-        table.appendChild(tr);
+
+        // Append the row to the correct section (thead or tbody)
+        if (isHeaderSection) {
+            thead.appendChild(tr);
+        } else {
+            tbody.appendChild(tr);
+        }
     });
+
+    // Append both thead and tbody to the table
+    table.appendChild(thead);
+    table.appendChild(tbody);
 
     console.log("Exiting createTableFromDivWrapper");
     return table;
@@ -72,6 +85,11 @@ function createTableCell(cellDiv, isHeaderSection, maxColumns) {
         setCellAttributes(cell, cellDiv);
         cell.innerHTML = cleanCellText(cellDiv.innerHTML);
 
+        // Check if this is a header cell and has a colspan, then align it to center
+        if (isHeader && getColspan(cellDiv)) {
+            cell.style.textAlign = 'center';
+        }
+
         // Check for nested tables within this cell
         const nestedTables = cell.querySelectorAll('table');
         nestedTables.forEach(nestedTable => applyNestedTableHeaders(nestedTable));
@@ -80,6 +98,7 @@ function createTableCell(cellDiv, isHeaderSection, maxColumns) {
     console.log("Exiting createTableCell with cell type:", isHeader ? 'th' : 'td', "and content:", cell.innerHTML);
     return cell;
 }
+
 
 // Function to set alignment, vertical alignment, and colspan attributes on a cell
 function setCellAttributes(cell, cellDiv) {
@@ -96,15 +115,6 @@ function setCellAttributes(cell, cellDiv) {
 }
 
 // Function to retrieve colspan from cell content if specified
-// function getColspan(cellDiv) {
-//     console.log("Entering getColspan");
-//     const colspanMatch = cellDiv.querySelector('p')?.textContent.match(/\$data-colspan=(\d+)\$/);
-//     const result = colspanMatch ? colspanMatch[1] : null;
-//     console.log("Exiting getColspan with result:", result);
-//     return result;
-// }
-
-
 function getColspan(cellDiv) {
     console.log("Entering getColspan");
     let result = null; // Declare result
