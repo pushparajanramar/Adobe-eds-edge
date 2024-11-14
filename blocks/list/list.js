@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const ul = document.querySelector('.default-content-wrapper ul');
+    const ul = document.querySelector('.product-label ul');
  
     // Get all siblings of the <ul> that are <p> elements
     const siblings = Array.from(ul.parentElement.children);
+   
     // Loop through each sibling after the <ul>
     let foundUl = false;
     siblings.forEach(sibling => {
@@ -21,3 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+ 
+ 
+ 
