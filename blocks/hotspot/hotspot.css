@@ -1,1 +1,13 @@
-
+.block.hotspot {
+    position: relative;
+    background: none;
+}
+ 
+.block.hotspot > div.hotspot {
+    background: none; /* Temporary for visibility */
+    z-index: 10; /* Ensure it is above the image */
+    width: 298px;
+    height: 27px;
+    position: absolute;
+    cursor: pointer;
+}
