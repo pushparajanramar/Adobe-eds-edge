@@ -124,12 +124,12 @@ function decorateLinks(main) {
                 console.log("link: ", `#${link.id}`)
                 anchor.href = `#${link.id}`;
                 anchor.classList.add('reverse-link');
-                if ((links.length - 1) === ind) {
-                  let originalString = paragraph.innerHTML;
-                  console.log('originalString', originalString)
-                  let result = originalString.slice(0, 74) + '' + originalString.slice(76);
-                  paragraph.innerHTML = result;
-                }
+                // if ((links.length - 1) === ind) {
+                //   let originalString = paragraph.innerHTML;
+                //   console.log('originalString', originalString)
+                //   let result = originalString.slice(0, 74) + '' + originalString.slice(76);
+                //   paragraph.innerHTML = result;
+                // }
                 paragraph.innerHTML = paragraph.innerHTML.replace(citationText + '.', ''); // Remove only the citation number with period
               }
  
